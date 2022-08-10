@@ -1,0 +1,31 @@
+{
+  "name": "@balancer-labs/frontend-e2e",
+  "version": "1.0.0",
+  "engines": {
+    "node": "14.x"
+  },
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "synpress:start": "SECRET_WORDS=\"test test test test test test test test test test test junk\" NETWORK_NAME=mainnet npx synpress run -ne -cf synpress.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balancer-labs/frontend-e2e.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/balancer-labs/frontend-e2e/issues"
+  },
+  "homepage": "https://github.com/balancer-labs/frontend-e2e#readme",
+  "devDependencies": {
+    "@synthetixio/synpress": "^1.2.0",
+    "@testing-library/cypress": "^8.0.3",
+    "@testing-library/dom": "^8.17.1",
+    "cypress": "^9.5.3",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-cypress": "^2.12.1"
+  }
+}
