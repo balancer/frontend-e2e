@@ -7,7 +7,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "synpress:start": "SECRET_WORDS=\"test test test test test test test test test test test junk\" NETWORK_NAME=mainnet npx synpress run -ne -cf synpress.json"
+    "synpress:start": "SECRET_WORDS=\"test test test test test test test test test test test junk\" NETWORK_NAME=mainnet synpress run -ne -cf synpress.json",
+    "synpress:ci": "SECRET_WORDS=\"test test test test test test test test test test test junk\" NETWORK_NAME=mainnet synpress run -cf synpress.json"
   },
   "repository": {
     "type": "git",
