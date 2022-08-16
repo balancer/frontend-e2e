@@ -5,6 +5,10 @@ node_modules
 tests/**/screenshots
 tests/**/videos
 
+# Cypress is ignored because it's handled by Synpress
+/cypress.json
+/cypress
+
 
 # local env files
 .env
