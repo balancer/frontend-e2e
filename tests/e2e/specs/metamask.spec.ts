@@ -5,8 +5,10 @@ describe('Test User Login', () => {
     cy.visit('/');
     // find "Connect Wallet" button and click it
     cy.get('nav').within(() => {
-      cy.findByRole('button', { name: /connect wallet/i }).click();
-    });
+      cy.findByRole('button', { name: /Connect Wallet/i }).click();
+    }).then(()=>{
+      cy.findByRole('button', { name: /Metamask/i }).click();
+    })
     // assuming there is only metamask popping up
     // always important to switch between metamask and cypress window
     cy.switchToMetamaskWindow();
