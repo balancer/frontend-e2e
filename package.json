@@ -27,6 +27,7 @@
     "cypress": "9.5.3",
     "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-cypress": "^2.12.1"
+    "eslint-plugin-cypress": "^2.12.1",
+    "mochawesome": "^7.1.3"
   }
 }

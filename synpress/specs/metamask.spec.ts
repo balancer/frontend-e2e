@@ -1,14 +1,21 @@
 /// <reference types="cypress" />
 
 describe('Test User Login', () => {
+  // TODO: Remove this test
+  // it.only('is quick 4',()=>{
+  //   cy.visit('/')
+  //   cy.findByRole('button', { name: /ASDFASDF DFDFDFDFF/i }).should('be.visible');
+  // })
   it('Connects with Metamask', () => {
     cy.visit('/');
     // find "Connect Wallet" button and click it
-    cy.get('nav').within(() => {
-      cy.findByRole('button', { name: /Connect Wallet/i }).click();
-    }).then(()=>{
-      cy.findByRole('button', { name: /Metamask/i }).click();
-    })
+    cy.get('nav')
+      .within(() => {
+        cy.findByRole('button', { name: /Connect Wallet/i }).click();
+      })
+      .then(() => {
+        cy.findByRole('button', { name: /Metamask/i }).click();
+      });
     // assuming there is only metamask popping up
     // always important to switch between metamask and cypress window
     cy.switchToMetamaskWindow();

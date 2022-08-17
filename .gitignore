@@ -2,10 +2,11 @@
 node_modules
 /dist
 /tailwind-static
-tests/**/screenshots
-tests/**/videos
+synpress/**/screenshots
+synpress/**/videos
+synpress/**/results
 
-# Cypress is ignored because it's handled by Synpress
+# Cypress config, and folder is ignored because everything is handled by Synpress
 /cypress.json
 /cypress
 
