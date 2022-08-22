@@ -2,10 +2,10 @@
 
 describe('Test User Login', () => {
   // TODO: Remove this test
-  // it.only('is quick 4',()=>{
-  //   cy.visit('/')
-  //   cy.findByRole('button', { name: /ASDFASDF DFDFDFDFF/i }).should('be.visible');
-  // })
+  it.only('fails', () => {
+    cy.visit('/');
+    cy.findByRole('button', { name: /Fail/i }).should('be.visible');
+  });
   it('Connects with Metamask', () => {
     cy.visit('/');
     // find "Connect Wallet" button and click it
