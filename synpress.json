@@ -21,7 +21,7 @@
   "supportFile": "synpress/support/index.ts",
   "reporter": "mochawesome",
   "reporterOptions": {
-    "reportDir": "synpress/results",
+    "reportDir": "synpress/report",
     "embeddedScreenshots": true,
     "html": false,
     "json": true,

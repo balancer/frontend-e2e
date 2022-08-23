@@ -11,8 +11,8 @@
     "synpress:start": "npm run synpress -- -ne",
     "synpress:ci": "npm-run-all synpress synpress:report --continue-on-error",
     "synpress:report": "npm-run-all synpress:report:generate synpress:report:copy-assets",
-    "synpress:report:generate": "marge synpress/results/mochawesome.json -o synpress/results",
-    "synpress:report:copy-assets": "mkdir -p synpress/screenshots synpress/videos && cp -r synpress/screenshots synpress/results/assets && cp -r synpress/videos synpress/results/assets"
+    "synpress:report:generate": "marge synpress/report/mochawesome.json -o synpress/report",
+    "synpress:report:copy-assets": "mkdir -p synpress/screenshots synpress/videos && cp -r synpress/screenshots synpress/report/assets && cp -r synpress/videos synpress/report/assets"
   },
   "repository": {
     "type": "git",
