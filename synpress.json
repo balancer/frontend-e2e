@@ -15,9 +15,9 @@
   "env": {
     "coverage": false
   },
-  "defaultCommandTimeout": 20000,
-  "pageLoadTimeout": 20000,
-  "requestTimeout": 20000,
+  "defaultCommandTimeout": 30000,
+  "pageLoadTimeout": 30000,
+  "requestTimeout": 30000,
   "supportFile": "synpress/support/index.ts",
   "reporter": "mochawesome",
   "reporterOptions": {
