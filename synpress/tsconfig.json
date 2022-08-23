@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "noEmit": true,
+    "esModuleInterop": true,
     "types": [
       "cypress",
       "@types/puppeteer-core",

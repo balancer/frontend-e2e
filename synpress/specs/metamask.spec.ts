@@ -2,9 +2,13 @@
 
 describe('Test User Login', () => {
   // TODO: Remove this test
-  it.only('fails', () => {
+  it('fails', () => {
     cy.visit('/');
     cy.findByRole('button', { name: /Fail/i }).should('be.visible');
+  });
+  it('fail another one', () => {
+    cy.visit('/');
+    cy.findByRole('button', { name: /second fail/i }).should('be.visible');
   });
   it('Connects with Metamask', () => {
     cy.visit('/');
