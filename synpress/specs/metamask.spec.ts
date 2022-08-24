@@ -22,7 +22,7 @@ describe('Test User Login', () => {
 
     cy.connectWallet();
 
-    cy.findByLabelText(/Token Out/i).type('1');
+    cy.findByLabelText(/Token Out/i).type('0.1');
     cy.findByRole('button', { name: /Preview/i }).click();
     cy.findByRole('button', { name: /Confirm trade/i }).click();
     cy.confirmMetamaskTransaction(undefined);
