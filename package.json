@@ -7,8 +7,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "synpress": ". ./.env.local && SECRET_WORDS=$SECRET_WORDS NETWORK_NAME=$NETWORK_NAME synpress run -cf synpress.json --config 'supportFile=synpress/support/index.ts'",
-    "synpress:start": "npm run synpress -- -ne",
+    "synpress": "synpress run -cf synpress.json --config 'supportFile=synpress/support/index.ts'",
+    "synpress:start": "env-cmd -f ./.env.local npm run synpress -- -ne",
     "synpress:ci": "npm-run-all synpress synpress:report --continue-on-error",
     "synpress:report": "npm-run-all synpress:report:generate synpress:report:copy-assets",
     "synpress:report:generate": "marge synpress/report/mochawesome.json -o synpress/report",
@@ -31,6 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@typescript-eslint/parser": "^5.33.1",
     "cypress": "9.5.3",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard-with-typescript": "^22.0.0",
