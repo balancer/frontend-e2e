@@ -17,7 +17,7 @@ describe('Test User Login', () => {
     cy.findByRole('button', { name: /0xc9a9\.\.\.c93b/i }).should('be.visible');
   });
 
-  it('Do a token swap', () => {
+  it('Does a token swap', () => {
     cy.visit('/#/trade');
 
     cy.connectWallet();
