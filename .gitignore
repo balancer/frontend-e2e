@@ -12,7 +12,6 @@ synpress/**/report
 
 
 # local env files
-.env
 .env.local
 .env.*.local
 

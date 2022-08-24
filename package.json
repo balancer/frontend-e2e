@@ -7,8 +7,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "synpress": ". ./.env && SECRET_WORDS=$SECRET_WORDS NETWORK_NAME=$NETWORK_NAME synpress run -cf synpress.json --config 'supportFile=synpress/support/index.ts'",
-    "synpress:start": "npm run synpress -- -ne",
+    "synpress": "SECRET_WORDS=$SECRET_WORDS NETWORK_NAME=$NETWORK_NAME synpress run -cf synpress.json --config 'supportFile=synpress/support/index.ts'",
+    "synpress:start": ". ./.env.local && npm run synpress -- -ne",
     "synpress:ci": "npm-run-all synpress synpress:report --continue-on-error",
     "synpress:report": "npm-run-all synpress:report:generate synpress:report:copy-assets",
     "synpress:report:generate": "marge synpress/report/mochawesome.json -o synpress/report",

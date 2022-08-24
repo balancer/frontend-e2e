@@ -4,7 +4,7 @@
 
 ## Setup
 
-1. Create file `.env` to project root and add these required env variables:
+1. Create file `.env.local` to project root and add these required env variables:
 
 ```sh
 SECRET_WORDS="word1 word2 ... ... etc"
