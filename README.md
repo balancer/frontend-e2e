@@ -1,19 +1,20 @@
 # Balancer Frontend testing with Synpress
 
-**Test wallet address:** `0xc9a9532a0d0ca26174caa328c5972a4bdc42c93b`
+- **Test wallet address:** `0xc9a9532a0d0ca26174caa328c5972a4bdc42c93b`
+- [Synpress docs](https://github.com/Synthetixio/synpress)
 
 ## Local Setup
 
-1. Create file `.env.local` to project root and add these required env variables:
+1. Create file `.env.local` to project root and add these [required env variables](https://github.com/Synthetixio/synpress#-important):
 
-```sh
-SECRET_WORDS="word1 word2 ... ... etc"
-NETWORK_NAME=goerli
-```
+   - ```sh
+        SECRET_WORDS="word1 word2 ... ... etc"
+        NETWORK_NAME=goerli
+     ```
 
 2. Start the frontend app using the same network you defined in `.env` file.
 
-   - Eg. `$ VUE_APP_NETWORK=1 npm run serve`
+   - Eg. Start with Goerli testnet by running: `$ VUE_APP_NETWORK=5 npm run serve`
 
 3. Once the frontend is up and running, you can start running the Synpress tests:
 
