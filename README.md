@@ -11,9 +11,13 @@ SECRET_WORDS="word1 word2 ... ... etc"
 NETWORK_NAME=goerli
 ```
 
-2. Start the frontend app using the same network you defined in `.env` file. Eg. `$ VUE_APP_NETWORK=1 npm run serve`
+2. Start the frontend app using the same network you defined in `.env` file.
 
-3. Once the frontend is up and running, you can start running the Synpress tests: `npm run synpress:start`
+   - Eg. `$ VUE_APP_NETWORK=1 npm run serve`
+
+3. Once the frontend is up and running, you can start running the Synpress tests:
+
+   - `$ npm run synpress:start`
 
 4. After test run is complete, you can see the test report in `synpress/report/mochawesome.html`
 
