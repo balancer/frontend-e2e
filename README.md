@@ -1,7 +1,7 @@
 # Balancer Frontend testing with Synpress
 
 - **Test wallet address:** `0xc9a9532a0d0ca26174caa328c5972a4bdc42c93b`
-- [Synpress docs](https://github.com/Synthetixio/synpress)
+- [Synpress docs](https://github.com/Synthetixio/synpress#readme)
 
 ## Local Setup
 
