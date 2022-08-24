@@ -7,8 +7,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "synpress:start": "SECRET_WORDS=\"test test test test test test test test test test test junk\" NETWORK_NAME=mainnet synpress run -ne -cf synpress.json",
-    "synpress:ci": "SECRET_WORDS=\"test test test test test test test test test test test junk\" NETWORK_NAME=mainnet synpress run -cf synpress.json"
+    "synpress": ". ./.env.local && SECRET_WORDS=$SECRET_WORDS NETWORK_NAME=$NETWORK_NAME synpress run -cf synpress.json --config 'supportFile=synpress/support/index.ts'",
+    "synpress:start": "npm run synpress -- -ne",
+    "synpress:ci": "npm-run-all synpress synpress:report --continue-on-error",
+    "synpress:report": "npm-run-all synpress:report:generate synpress:report:copy-assets",
+    "synpress:report:generate": "marge synpress/report/mochawesome.json -o synpress/report",
+    "synpress:report:copy-assets": "mkdir -p synpress/screenshots synpress/videos && cp -r synpress/screenshots synpress/report/assets && cp -r synpress/videos synpress/report/assets"
   },
   "repository": {
     "type": "git",
@@ -35,6 +39,8 @@
     "husky": "^8.0.0",
     "lint-staged": "^13.0.3",
     "mochawesome": "^7.1.3",
+    "mochawesome-report-generator": "^6.2.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "typescript": "^4.7.4"
   },

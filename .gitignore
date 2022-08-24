@@ -4,7 +4,7 @@ node_modules
 /tailwind-static
 synpress/**/screenshots
 synpress/**/videos
-synpress/**/results
+synpress/**/report
 
 # Cypress config, and folder is ignored because everything is handled by Synpress
 /cypress.json
@@ -12,7 +12,6 @@ synpress/**/results
 
 
 # local env files
-.env
 .env.local
 .env.*.local
 

@@ -1,21 +1,7 @@
-/// <reference types="cypress" />
-
 describe('Test User Login', () => {
-  // TODO: Remove this test
-  // it.only('is quick 4',()=>{
-  //   cy.visit('/')
-  //   cy.findByRole('button', { name: /ASDFASDF DFDFDFDFF/i }).should('be.visible');
-  // })
   it('Connects with Metamask', () => {
     cy.visit('/');
-    // find "Connect Wallet" button and click it
-    cy.get('nav')
-      .within(() => {
-        cy.findByRole('button', { name: /Connect Wallet/i }).click();
-      })
-      .then(() => {
-        cy.findByRole('button', { name: /Metamask/i }).click();
-      });
+    cy.connectWallet();
     // assuming there is only metamask popping up
     // always important to switch between metamask and cypress window
     cy.switchToMetamaskWindow();
@@ -28,6 +14,22 @@ describe('Test User Login', () => {
     // switch back to cypress window (your dApp)
     cy.switchToCypressWindow();
     // check UI change
-    cy.findByRole('button', { name: /0xf39F\.\.\.2266/i }).should('be.visible');
+    cy.findByRole('button', { name: /0xc9a9\.\.\.c93b/i }).should('be.visible');
+  });
+
+  it('Do a token swap', () => {
+    cy.visit('/#/trade');
+
+    cy.connectWallet();
+
+    cy.findByLabelText(/Token Out/i).type('1');
+    cy.findByRole('button', { name: /Preview/i }).click();
+    cy.findByRole('button', { name: /Confirm trade/i }).click();
+    cy.confirmMetamaskTransaction(undefined);
+
+    cy.findByText(/Trade pending/i).should('be.visible');
+
+    // Increase timeout while waiting for the trade to be confirmed
+    cy.findByText(/Trade confirmed/i, { timeout: 40000 }).should('be.visible');
   });
 });
