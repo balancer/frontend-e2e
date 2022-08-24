@@ -27,4 +27,4 @@ NETWORK_NAME=goerli
 
 If the tests fail in CI, you can download the test report artifact with video and screenshots from the job's Summary Page.
 
-<img width="300" alt="Download job artifacts" src="./Download job artifacts.png">
+<img width="400" alt="Download job artifacts" src="./Download job artifacts.png">
