@@ -26,4 +26,5 @@ NETWORK_NAME=goerli
 [E2E Job config](https://github.com/balancer-labs/frontend-v2/blob/develop/.github/workflows/checks.yml)
 
 If the tests fail in CI, you can download the test report artifact with video and screenshots from the job's Summary Page.
+
 <img width="300" alt="Download job artifacts" src="./Download job artifacts.png">
