@@ -7,7 +7,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "synpress": "echo $NETWORK_NAME '<-' && SECRET_WORDS=$SECRET_WORDS NETWORK_NAME=$NETWORK_NAME synpress run -cf synpress.json --config 'supportFile=synpress/support/index.ts'",
+    "synpress": "synpress run -cf synpress.json --config 'supportFile=synpress/support/index.ts'",
     "synpress:start": "env-cmd -f ./.env.local npm run synpress -- -ne",
     "synpress:ci": "npm-run-all synpress synpress:report --continue-on-error",
     "synpress:report": "npm-run-all synpress:report:generate synpress:report:copy-assets",
