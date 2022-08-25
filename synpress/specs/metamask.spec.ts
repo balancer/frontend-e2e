@@ -1,13 +1,10 @@
+import { connectWallet } from '../utils';
+
 describe('Test User Login', () => {
   it('Connects with Metamask', () => {
     cy.visit('/');
-    cy.get('nav')
-      .within(() => {
-        cy.findByRole('button', { name: /Connect Wallet/i }).click();
-      })
-      .then(() => {
-        cy.findByRole('button', { name: /Metamask/i }).click();
-      });
+
+    connectWallet();
     // assuming there is only metamask popping up
     // always important to switch between metamask and cypress window
     cy.switchToMetamaskWindow();
@@ -26,13 +23,7 @@ describe('Test User Login', () => {
   it('Does a token swap', () => {
     cy.visit('/#/trade');
 
-    cy.get('nav')
-      .within(() => {
-        cy.findByRole('button', { name: /Connect Wallet/i }).click();
-      })
-      .then(() => {
-        cy.findByRole('button', { name: /Metamask/i }).click();
-      });
+    connectWallet();
 
     cy.findByLabelText(/Token Out/i).type('0.1');
     cy.findByRole('button', { name: /Preview/i }).click();
