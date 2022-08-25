@@ -9,7 +9,7 @@
   "scripts": {
     "synpress": "synpress run -cf synpress.json --config 'supportFile=synpress/support/index.ts'",
     "synpress:start": "env-cmd -f ./.env.local npm run synpress -- -ne",
-    "synpress:ci": "npm-run-all synpress synpress:report --continue-on-error",
+    "synpress:ci": "echo $SECRET_WORDS && echo $NETWORK_NAME && npm-run-all synpress synpress:report --continue-on-error",
     "synpress:report": "npm-run-all synpress:report:generate synpress:report:copy-assets",
     "synpress:report:generate": "marge synpress/report/mochawesome.json -o synpress/report",
     "synpress:report:copy-assets": "mkdir -p synpress/screenshots synpress/videos && cp -r synpress/screenshots synpress/report/assets && cp -r synpress/videos synpress/report/assets"
