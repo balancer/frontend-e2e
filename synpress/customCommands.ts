@@ -7,7 +7,7 @@
 export function connectWallet() {
   return (
     cy
-      // find "Connect Wallet" button in nav bar and click it
+      // find "Connect Wallet" button in the nav bar and click it
       .get('nav')
       .within(() => {
         cy.findByRole('button', { name: /Connect Wallet/i }).click();
@@ -26,9 +26,6 @@ export function connectWallet() {
             if (!accounts.length) {
               cy.switchToMetamaskWindow();
               cy.acceptMetamaskAccess(undefined).should('be.true');
-
-              // Confirming not needed?
-              // cy.confirmMetamaskSignatureRequest();
 
               cy.switchToCypressWindow();
             }
