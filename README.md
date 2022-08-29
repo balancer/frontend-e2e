@@ -20,7 +20,9 @@
 
    - `$ npm run synpress:start`
 
-4. After test run is complete, you can see the test report in `synpress/report/mochawesome.html`
+4. After test run is complete, Cypress window stays open so you can investigate the test results.
+   - You can generate test report by running: `$ npm run synpress:report`
+   - Report is saved to: `synpress/report/mochawesome.html`
 
 ## Running in CI
 

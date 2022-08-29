@@ -30,6 +30,6 @@ describe('Trade page', () => {
     cy.findByText(/Trade pending/i).should('be.visible');
 
     // Increase timeout while waiting for the trade to be confirmed
-    cy.findByText(/Trade confirmed/i, { timeout: 40000 }).should('be.visible');
+    cy.findByText(/Trade confirmed/i, { timeout: 60000 }).should('be.visible');
   });
 });
