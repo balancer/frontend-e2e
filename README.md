@@ -12,7 +12,7 @@
         NETWORK_NAME=goerli
      ```
 
-2. Start the frontend app using the same network you defined in `.env` file.
+2. Start the [Frontend App](https://github.com/balancer-labs/frontend-v2/) using the same network you defined in `.env` file.
 
    - Eg. Start with Goerli testnet by running: `$ VUE_APP_NETWORK=5 npm run serve`
 
@@ -26,9 +26,9 @@
 
 [E2E Job config](https://github.com/balancer-labs/frontend-v2/blob/develop/.github/workflows/checks.yml)
 
-If the tests fail in CI, you can download the test report artifact with video and screenshots from the job's Summary Page.
+If the tests fail in CI, you can download the test report artifact with video and screenshots from the workflow's Summary Page.
 
-<img width="400" alt="Download job artifacts" src="./Download job artifacts.png">
+<img width="500" alt="Download job artifacts" src="./Download job artifacts.png">
 
 ## Synpress caveats
 
