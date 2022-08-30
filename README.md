@@ -11,6 +11,7 @@
         SECRET_WORDS="word1 word2 ... ... etc"
         NETWORK_NAME=goerli
      ```
+   - If you want to use a specific Metamask acocunt, add the account number env variable to `.env.local`. Eg. `CYPRESS_WALLET_ACCOUNT_NUMBER=3`
 
 2. Start the [Frontend App](https://github.com/balancer-labs/frontend-v2/) using the same network you defined in `.env` file.
 
