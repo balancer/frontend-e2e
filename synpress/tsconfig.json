@@ -3,7 +3,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "target": "es5",
-    "lib": ["es5", "esnext", "dom"],
+    "lib": ["esnext", "dom"],
     "types": [
       "cypress",
       "node",
