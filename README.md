@@ -1,6 +1,5 @@
 # Balancer Frontend testing with Synpress
 
-- **Test wallet address:** `0xc9a9532a0d0ca26174caa328c5972a4bdc42c93b`
 - [Synpress docs](https://github.com/Synthetixio/synpress#readme)
 
 ## Local Setup
@@ -22,12 +21,13 @@
    - `$ npm run synpress:start`
 
 4. After test run is complete, Cypress window stays open so you can investigate the test results.
-   - You can generate test report by running: `$ npm run synpress:report`
+   - If you want, you can generate test report by running: `$ npm run synpress:report`
    - Report is saved to: `synpress/report/mochawesome.html`
 
 ## Running in CI
 
-[E2E Job config](https://github.com/balancer-labs/frontend-v2/blob/develop/.github/workflows/checks.yml)
+- [E2E Job config](https://github.com/balancer-labs/frontend-v2/blob/develop/.github/workflows/checks.yml)
+- CI testing Wallet address: `0xc9a9532a0d0ca26174caa328c5972a4bdc42c93b`
 
 If the tests fail in CI, you can download the test report artifact with video and screenshots from the workflow's Summary Page.
 
