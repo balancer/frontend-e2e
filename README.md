@@ -33,6 +33,21 @@ If the tests fail in CI, you can download the test report artifact with video an
 
 <img width="500" alt="Download job artifacts" src="./Download job artifacts.png">
 
+### Adding new tests and fixing tests
+
+- Checkout branch of `frontend-e2e` and make changes to tests
+- Set that branch in `frontend-v2` E2E job: `.github/workflow/checks.yml`
+
+  - ```diff
+    uses: actions/checkout@v2
+    with:
+      repository: balancer-labs/frontend-e2e
+    + ref: new-e2e-branch-name
+      path: e2e
+    ```
+
+- When test have run successfully, merge `frontend-e2e` PR, then remove brach `ref` line in `.github/workflow/checks.yml` and merge your `frontend-v2` PR.
+
 ## Synpress caveats
 
 1. Running individual tests locally by opening Cypress UI is not supported because Synpress doesn't clear metamask state before each e2e test. To run only selected tests, mark them with `.only` and `.skip` as defined in [Mocha documentation](https://mochajs.org/#exclusive-tests).
