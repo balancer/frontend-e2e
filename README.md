@@ -4,25 +4,26 @@
 
 ## Local Setup
 
-1. Create file `.env.local` to project root and add these [required env variables](https://github.com/Synthetixio/synpress#-important):
+### 1. Create file `.env.local` to project root and add these [required env variables](https://github.com/Synthetixio/synpress#-important):
 
-   - ```sh
+- ```sh
         SECRET_WORDS="word1 word2 ... ... etc"
         NETWORK_NAME=goerli
-     ```
-   - If you want to use a specific Metamask acocunt, add the account number env variable to `.env.local`. Eg. `CYPRESS_WALLET_ACCOUNT_NUMBER=3`
+  ```
+- If you want to use a specific Metamask acocunt, add the account number env variable to `.env.local`. Eg. `CYPRESS_WALLET_ACCOUNT_NUMBER=3`
 
-2. Start the [Frontend App](https://github.com/balancer-labs/frontend-v2/) using the same network you defined in `.env` file.
+### 2. Start the [Frontend App](https://github.com/balancer-labs/frontend-v2/) using the same network you defined in `.env` file.
 
-   - Eg. Start with Goerli testnet by running: `$ VUE_APP_NETWORK=5 npm run serve`
+- Eg. Start with Goerli testnet by running: `$ VUE_APP_NETWORK=5 npm run serve`
 
-3. Once the frontend is up and running, you can start running the Synpress tests:
+### 3. Once the frontend is up and running, you can start running the Synpress tests:
 
-   - `$ npm run synpress:start`
+- `$ npm run synpress:start`
 
-4. After test run is complete, Cypress window stays open so you can investigate the test results.
-   - If you want, you can generate test report by running: `$ npm run synpress:report`
-   - Report is saved to: `synpress/report/mochawesome.html`
+### 4. After test run is complete, Cypress window stays open so you can investigate the test results.
+
+- If you want, you can generate test report by running: `$ npm run synpress:report`
+- Report is saved to: `synpress/report/mochawesome.html`
 
 ## Running in CI
 
