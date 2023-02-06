@@ -2,7 +2,7 @@
   "name": "@balancer-labs/frontend-e2e",
   "version": "1.0.0",
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "description": "",
   "main": "index.js",

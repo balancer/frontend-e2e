@@ -17,19 +17,24 @@ describe('Connect with Metamask', () => {
 
 describe('Trade page', () => {
   it('Does a token swap', () => {
-    cy.visit('/#/trade');
+    cy.visit('/#/goerli/trade');
 
     connectWallet();
 
     cy.findByLabelText(/Token Out/i).type('0.1');
+
+    // Accept the high price impact
+    cy.findByText(/High price impact/i).should('be.visible');
+    cy.findByRole('button', { name: /Accept/i }).click();
+
     cy.findByRole('button', { name: /Preview/i }).click();
-    cy.findByRole('button', { name: /Confirm trade/i }).click();
+    cy.findByRole('button', { name: /Confirm swap/i }).click();
 
     cy.confirmMetamaskTransaction(undefined);
 
-    cy.findByText(/Trade pending/i).should('be.visible');
+    cy.findByText(/Swap pending/i).should('be.visible');
 
-    // Increase timeout while waiting for the trade to be confirmed
-    cy.findByText(/Trade confirmed/i, { timeout: 60000 }).should('be.visible');
+    // Increase timeout while waiting for the Swap to be confirmed
+    cy.findByText(/Swap confirmed/i, { timeout: 60000 }).should('be.visible');
   });
 });
