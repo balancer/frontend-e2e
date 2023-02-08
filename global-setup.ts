@@ -9,7 +9,6 @@ async function globalSetup(config: FullConfig) {
     password: 'testingtesting',
     seed: process.env.SECRET_WORDS,
     version: MetaMaskWallet.recommendedVersion,
-    headless: !!process.env.CI,
   });
 
   // Add Hardhet network
