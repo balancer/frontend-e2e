@@ -2,13 +2,10 @@
 node_modules
 /dist
 /tailwind-static
-synpress/**/screenshots
-synpress/**/videos
-synpress/**/report
 
-# Cypress config, and folder is ignored because everything is handled by Synpress
-/cypress.json
-/cypress
+/test-results
+/playwright-report
+
 
 
 # local env files
