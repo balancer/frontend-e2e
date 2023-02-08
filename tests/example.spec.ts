@@ -7,7 +7,7 @@ export const test = base.extend<TestFixtures>(testFixtures);
 
 test.describe.configure({ mode: 'serial' }); // Avoid colliding browser sessions
 test('can connect to an application', async ({ page, metamask }) => {
-  await page.goto('http://localhost:8080/#/' + networkName);
+  await page.goto('http://localhost:8080/#/' + networkName, { timeout: 30000 });
 
   await metamask.unlock('testingtesting');
   page.bringToFront();
