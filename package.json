@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "playwright:test": "env-cmd -f ./.env.local npx playwright test --trace on",
-    "playwright:ci": "npx playwright test --trace on",
+    "playwright:ci": "xvfb-run npx playwright test --trace on",
     "playwright:codegen": "npx playwright codegen localhost:8080",
     "synpress": "synpress run -cf synpress.json --config 'supportFile=synpress/support/index.ts'",
     "synpress:start": "env-cmd -f ./.env.local npm run synpress -- -ne",
