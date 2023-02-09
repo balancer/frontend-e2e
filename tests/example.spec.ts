@@ -1,9 +1,32 @@
-import { expect, test as base } from '@playwright/test';
+import { expect, Page, test as base } from '@playwright/test';
+import { Dappwright } from '@tenkeylabs/dappwright';
 import testFixtures, { TestFixtures } from './fixtures/testFixtures';
 
 const networkName = 'ethereum';
 
 export const test = base.extend<TestFixtures>(testFixtures);
+
+async function connectWallet(page: Page, metamask: Dappwright) {
+  const connectedWalletButton = page.getByRole('button', {
+    name:
+      // Eg. 0x1234...1234
+      /0x.{4}(...).{4}/i,
+  });
+  // Check if the wallet is alreade connected
+  if (await connectedWalletButton.isHidden()) {
+    await page.getByRole('button', { name: 'Connect wallet' }).first().click();
+
+    await page.getByRole('button', { name: 'Metamask' }).click({ force: true });
+    // Approve the connection when MetaMask pops up
+    await metamask.approve();
+
+    // Wait for the dapp to redirect
+    await page.waitForURL('http://localhost:8080/#/' + networkName);
+
+    // Check the wallet button in nav
+    expect(await connectedWalletButton).toBeVisible();
+  }
+}
 
 test.describe.configure({ mode: 'serial' }); // Avoid colliding browser sessions
 test('can connect to an application', async ({ page, metamask }) => {
@@ -11,25 +34,8 @@ test('can connect to an application', async ({ page, metamask }) => {
 
   await metamask.unlock('testingtesting');
   page.bringToFront();
-  await page.getByRole('button', { name: 'Connect wallet' }).first().click();
 
-  await page.getByRole('button', { name: 'Metamask' }).click({ force: true });
-  // Approve the connection when MetaMask pops up
-  await metamask.approve();
-
-  // Wait for the dapp to redirect
-  await page.waitForURL('http://localhost:8080/#/' + networkName);
-
-  expect(await page.getByText('0x...3485')).toBeDefined();
-
-  // Check the wallet button in nav
-  expect(
-    await page.getByRole('button', {
-      name:
-        // Eg. 0x1234...1234
-        /0x.{4}(...).{4}/i,
-    })
-  ).toBeVisible();
+  await connectWallet(page, metamask);
 
   // Go to swap
   await page.getByRole('link', { name: 'Swap' }).click();
