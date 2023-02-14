@@ -21,6 +21,7 @@ async function connectWallet(page: Page, metamask: Dappwright) {
 
   // Check if the wallet is alreade connected
   if (accountButtonHidden && loadingWalletButtonHidden) {
+    console.log('hello connect');
     await page.getByRole('button', { name: 'Connect wallet' }).first().click();
 
     await page.getByRole('button', { name: 'Metamask' }).click({ force: true });
