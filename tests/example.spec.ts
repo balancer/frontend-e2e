@@ -7,19 +7,21 @@ const networkName = 'ethereum';
 export const test = base.extend<TestFixtures>(testFixtures);
 
 async function connectWallet(page: Page, metamask: Dappwright) {
-  const accountButton = page.getByRole('button', {
-    name:
-      // Eg. 0x1234...1234
-      /0x.{4}(...).{4}/i,
-  });
-  const loadingAccountButton = page.getByRole('button', {
-    name: /Connecting.../i,
-  });
+  const getAccountButton = () =>
+    page.getByRole('button', {
+      name:
+        // Eg. 0x1234...1234
+        /0x.{4}(...).{4}/i,
+    });
+  const getLoadingAccountButton = () =>
+    page.getByRole('button', {
+      name: /Connecting.../i,
+    });
 
-  const loadingWalletButtonHidden = await loadingAccountButton.isHidden();
-  const accountButtonHidden = await accountButton.isHidden();
+  const loadingWalletButtonHidden = await getLoadingAccountButton().isHidden();
+  const accountButtonHidden = await getAccountButton().isHidden();
 
-  // Check if the wallet is alreade connected
+  // Check if the wallet is not yet connected
   if (accountButtonHidden && loadingWalletButtonHidden) {
     console.log('hello connect');
     await page.getByRole('button', { name: 'Connect wallet' }).first().click();
@@ -32,7 +34,7 @@ async function connectWallet(page: Page, metamask: Dappwright) {
     await page.waitForURL('http://localhost:8080/#/' + networkName);
 
     // Check the wallet button in nav
-    expect(await accountButton).toBeVisible();
+    expect(await getAccountButton()).toBeVisible();
   }
 }
 
