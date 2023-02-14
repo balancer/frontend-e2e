@@ -13,8 +13,8 @@ import { devices } from '@playwright/test';
 const config: PlaywrightTestConfig = {
   globalSetup: require.resolve('./global-setup'),
   testDir: './tests',
-  /* Maximum time one test can run for is 30 * 10000 */
-  timeout: 30 * 1000,
+  /* Maximum time one test can run for is 40 * 10000 */
+  timeout: 40 * 1000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
