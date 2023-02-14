@@ -2,7 +2,7 @@ import { expect, Page, test as base } from '@playwright/test';
 import { Dappwright } from '@tenkeylabs/dappwright';
 import testFixtures, { TestFixtures } from './fixtures/testFixtures';
 
-const networkName = 'ethereum';
+const networkName = 'goerli';
 
 export const test = base.extend<TestFixtures>(testFixtures);
 
@@ -17,6 +17,7 @@ async function connectWallet(page: Page, metamask: Dappwright) {
     page.getByRole('button', {
       name: /Connecting.../i,
     });
+  const getMismatchNetworkMessage = () => page.getByText(/Please switch to /i);
 
   const loadingWalletButtonHidden = await getLoadingAccountButton().isHidden();
   const accountButtonHidden = await getAccountButton().isHidden();
@@ -36,6 +37,22 @@ async function connectWallet(page: Page, metamask: Dappwright) {
     // Check the wallet button in nav
     expect(await getAccountButton()).toBeVisible();
   }
+
+  if (await getMismatchNetworkMessage().isVisible()) {
+    // Switch to correct network
+    await metamask.switchNetwork(networkName);
+    await page.bringToFront();
+  }
+  await expect(getMismatchNetworkMessage()).toBeHidden();
+
+  // TODO: Try this with Polygon
+  // // Change to correct network
+  // await expect(
+  //   page.getByText(/Please switch to Polygon Mainnet/i)
+  // ).toBeVisible();
+  // await page.getByRole('button', { name: /Switch Network/i }).click();
+  // // Approve the network change
+  // await metamask.approve();
 }
 
 test.describe.configure({ mode: 'serial' }); // Avoid colliding browser sessions
@@ -50,9 +67,10 @@ test('can connect to an application', async ({ page, metamask }) => {
   // Go to swap
   await page.getByRole('link', { name: 'Swap' }).click();
 
-  await page.locator('input[name="tokenIn"]').fill('0.1');
+  await page.getByLabel(/Token Out/i).type('0.1');
 
-  // page.getByText('High price impact');
+  // Accept the high price impact
+  await page.getByRole('button', { name: /Accept/i }).click();
 
   // It takes a long time to load preview button
   await page.getByRole('button', { name: /Preview/i }).click();

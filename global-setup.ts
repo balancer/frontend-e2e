@@ -11,13 +11,15 @@ async function globalSetup(config: FullConfig) {
     version: MetaMaskWallet.recommendedVersion,
   });
 
-  // Add Hardhet network
+  // Add Polygon network
   // await metamask.addNetwork({
-  //   networkName: 'Hardhat',
-  //   rpc: 'http://127.0.0.1:8545/',
-  //   chainId: 31337,
-  //   symbol: 'ETH',
+  //
+  //   networkName: 'polygon',
+  //   rpc: 'https://polygon-rpc.com',
+  //   chainId: 137,
+  //   symbol: 'Matic',
   // });
+  // await metamask.switchNetwork('polygon');
 
   // Add an extra account
   // await metamask.createAccount();
