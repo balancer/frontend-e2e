@@ -19,6 +19,12 @@ async function connectWallet(page: Page, metamask: Dappwright) {
     });
   const getMismatchNetworkMessage = () => page.getByText(/Please switch to /i);
 
+  await metamask.unlock('testingtesting');
+  page.bringToFront();
+
+  // Wait for a moment for the page to load, to see if the wallet is connected automatically
+  await page.waitForTimeout(1000);
+
   const loadingWalletButtonHidden = await getLoadingAccountButton().isHidden();
   const accountButtonHidden = await getAccountButton().isHidden();
 
@@ -57,9 +63,6 @@ async function connectWallet(page: Page, metamask: Dappwright) {
 test.describe.configure({ mode: 'serial' }); // Avoid colliding browser sessions
 test('can connect to an application', async ({ page, metamask }) => {
   await page.goto('http://localhost:8080/#/' + networkName, { timeout: 30000 });
-
-  await metamask.unlock('testingtesting');
-  page.bringToFront();
 
   await connectWallet(page, metamask);
 
