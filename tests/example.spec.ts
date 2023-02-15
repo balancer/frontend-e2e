@@ -24,7 +24,6 @@ async function connectWallet(page: Page, metamask: Dappwright) {
 
   // Check if the wallet is not yet connected
   if (accountButtonHidden && loadingWalletButtonHidden) {
-    console.log('hello connect');
     await page.getByRole('button', { name: 'Connect wallet' }).first().click();
 
     await page.getByRole('button', { name: 'Metamask' }).click({ force: true });
@@ -72,12 +71,20 @@ test('can connect to an application', async ({ page, metamask }) => {
   // Accept the high price impact
   await page.getByRole('button', { name: /Accept/i }).click();
 
-  // It takes a long time to load preview button
   await page.getByRole('button', { name: /Preview/i }).click();
 
-  await expect(page.getByText('Preview swap')).toBeVisible();
+  await page.getByRole('button', { name: /Confirm Swap/i }).click();
+  await metamask.confirmTransaction();
 
-  await expect(
-    page.getByRole('button', { name: /Confirm Swap/i })
-  ).toBeVisible();
+  // Check the Swap pending toast shows up
+  expect(await page.getByText(/Swap pending/i)).toBeVisible();
+
+  // Check the Swap confirmed toast shows up
+  await page.getByText(/Swap confirmed/i).waitFor({
+    state: 'visible',
+    // Increase timeout while waiting for the Swap to be confirmed
+    timeout: 60000,
+  });
+
+  expect(await page.getByText(/Swap confirmed/i)).toBeVisible();
 });
