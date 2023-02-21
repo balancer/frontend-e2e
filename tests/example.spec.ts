@@ -31,7 +31,7 @@ async function connectWallet(page: Page, metamask: Dappwright) {
     });
   const getMismatchNetworkMessage = () => page.getByText(/Please switch to /i);
 
-  await metamask.unlock('testingtesting');
+  await metamask.unlock('testingbal123');
   page.bringToFront();
 
   // Wait for a moment for the page to load, to see if the wallet is connected automatically

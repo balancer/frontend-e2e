@@ -1,12 +1,16 @@
 import { FullConfig } from '@playwright/test';
 import dappwright, { MetaMaskWallet } from '@tenkeylabs/dappwright';
 // import playwright from 'playwright';
+import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config();
 
 async function globalSetup(config: FullConfig) {
   console.log('check variables', process.env.CI);
+  console.log(process.env.SECRET_WORDS);
   const [metamask, page, context] = await dappwright.bootstrap('', {
     wallet: 'metamask',
-    password: 'testingtesting',
+    showTestNets: true,
+    password: 'testingbal123',
     seed: process.env.SECRET_WORDS,
     version: MetaMaskWallet.recommendedVersion,
   });
