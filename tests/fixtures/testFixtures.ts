@@ -40,7 +40,7 @@ const testFixtures: Fixtures<
     // await metamask.unlock();
   },
   toast: async ({ page }, use) => {
-    const toast = await page.getByRole('alert');
+    const toast = await page.getByRole('alert').last();
 
     await use(toast);
   },
