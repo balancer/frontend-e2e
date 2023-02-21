@@ -2,7 +2,6 @@ import {
   BrowserContext,
   expect,
   Fixtures,
-  Locator,
   Page,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
@@ -15,14 +14,28 @@ interface TestFixtures {
   context: BrowserContext;
   metamask: Dappwright;
   toast: ReturnType<typeof getToastFixture>;
+  modal: ReturnType<typeof getModalFixture>;
 }
 
 const getToastFixture = (page: Page) => {
+  function get(name: string | RegExp) {
+    return page.getByRole('alert').last().getByText(name);
+  }
   return {
-    get: (name: string | RegExp) => {
-      return page.getByRole('alert').last().getByText(name);
+    get,
+    waitUntilVisible: async (name: string | RegExp) => {
+      await get(name).waitFor({
+        state: 'visible',
+        // Increase timeout while waiting for the Add Liquidity to be confirmed
+        timeout: 60000,
+      });
+      expect(await get(name)).toBeVisible();
     },
   };
+};
+
+const getModalFixture = (page: Page) => {
+  return page.getByRole('dialog');
 };
 
 const testFixtures: Fixtures<
@@ -51,7 +64,10 @@ const testFixtures: Fixtures<
   },
   toast: async ({ page }, use) => {
     const toast = getToastFixture(page);
-
+    await use(toast);
+  },
+  modal: async ({ page }, use) => {
+    const toast = getModalFixture(page);
     await use(toast);
   },
 };
