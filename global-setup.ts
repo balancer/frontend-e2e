@@ -13,7 +13,6 @@ async function globalSetup(config: FullConfig) {
 
   // Add Polygon network
   // await metamask.addNetwork({
-  //
   //   networkName: 'polygon',
   //   rpc: 'https://polygon-rpc.com',
   //   chainId: 137,

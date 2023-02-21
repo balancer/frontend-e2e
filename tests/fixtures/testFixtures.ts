@@ -1,15 +1,18 @@
 import {
   BrowserContext,
   Fixtures,
+  Locator,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
+  test as base,
 } from '@playwright/test';
 
 import dappwright, { Dappwright, MetaMaskWallet } from '@tenkeylabs/dappwright';
 
-export interface TestFixtures {
+interface TestFixtures {
   context: BrowserContext;
   metamask: Dappwright;
+  toast: Locator;
 }
 
 const testFixtures: Fixtures<
@@ -36,6 +39,13 @@ const testFixtures: Fixtures<
     // Unlock the wallet
     // await metamask.unlock();
   },
+  toast: async ({ page }, use) => {
+    const toast = await page.getByRole('alert');
+
+    await use(toast);
+  },
 };
 
-export default testFixtures;
+export const test = base.extend<TestFixtures>(testFixtures);
+
+test.describe.configure({ mode: 'serial' }); // Avoid colliding browser sessions
