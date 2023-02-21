@@ -1,5 +1,6 @@
 import {
   BrowserContext,
+  expect,
   Fixtures,
   Locator,
   PlaywrightTestArgs,
@@ -49,3 +50,78 @@ const testFixtures: Fixtures<
 export const test = base.extend<TestFixtures>(testFixtures);
 
 test.describe.configure({ mode: 'serial' }); // Avoid colliding browser sessions
+
+// Goerli
+const network = {
+  networkName: 'goerli',
+  rpc: 'https://goerli.blockpi.network/v1/rpc/public',
+  chainId: 5,
+  symbol: 'ETH',
+};
+
+// Polygon
+// const network = {
+//   networkName: 'polygon',
+//   rpc: 'https://polygon-rpc.com',
+//   chainId: 137,
+//   symbol: 'Matic',
+// };
+
+export async function connectWallet(page: Page, metamask: Dappwright) {
+  const getAccountButton = () =>
+    page.getByRole('button', {
+      name:
+        // Eg. 0x1234...1234
+        /0x.{4}(...).{4}/i,
+    });
+  const getLoadingAccountButton = () =>
+    page.getByRole('button', {
+      name: /Connecting.../i,
+    });
+  const getMismatchNetworkMessage = () => page.getByText(/Please switch to /i);
+
+  await page.goto('http://localhost:8080/#/' + network.networkName, {
+    timeout: 30000,
+  });
+
+  await metamask.unlock('testingbal123');
+  page.bringToFront();
+
+  // Wait for a moment for the page to load, to see if the wallet is connected automatically
+  await page.waitForTimeout(1000);
+
+  const loadingWalletButtonHidden = await getLoadingAccountButton().isHidden();
+  const accountButtonHidden = await getAccountButton().isHidden();
+
+  // Check if the wallet is not yet connected
+  if (accountButtonHidden && loadingWalletButtonHidden) {
+    await page.getByRole('button', { name: 'Connect wallet' }).first().click();
+
+    await page.getByRole('button', { name: 'Metamask' }).click({ force: true });
+    // Approve the connection when MetaMask pops up
+    await metamask.approve();
+
+    // // Wait for the dapp to redirect
+    // await page.waitForURL('http://localhost:8080/#/' + network.networkName);
+
+    // Check the wallet button in nav
+    expect(await getAccountButton()).toBeVisible();
+  }
+
+  if (await getMismatchNetworkMessage().isVisible()) {
+    const hasNetwork = await metamask.hasNetwork(network.networkName);
+
+    if (!hasNetwork) {
+      await metamask.switchNetwork(network.networkName);
+    } else if (network.networkName === 'polygon') {
+      // Add Polygon network if not yet added
+      await metamask.addNetwork(network);
+    }
+
+    // Switch to correct network
+    await page.bringToFront();
+    // Temporary fix to make the mismatch network message disappear
+    await page.reload();
+  }
+  expect(await getMismatchNetworkMessage()).toBeHidden();
+}
