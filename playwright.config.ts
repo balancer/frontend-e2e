@@ -22,14 +22,15 @@ const config: PlaywrightTestConfig = {
      */
     timeout: 10000,
   },
-  /* Run tests in files in parallel */
-  fullyParallel: true,
+  // Parallel tests don't work with Dappwright
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
 
   retries: 1,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+
+  // Parallel tests don't work with Dappwright
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI
     ? [['github'], ['list'], ['html']]

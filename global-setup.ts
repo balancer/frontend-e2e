@@ -5,9 +5,6 @@ import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-
 dotenv.config();
 
 async function globalSetup(config: FullConfig) {
-  console.log('secret words: ', process.env.SECRET_WORDS);
-  console.log('even more secret: ', process.env.TEST_WALLET_SECRET_WORDS);
-  console.log('testing key: ', process.env.TEST_KEY);
   const [metamask, page, context] = await dappwright.bootstrap('', {
     wallet: 'metamask',
     showTestNets: true,

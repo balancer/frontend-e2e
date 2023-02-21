@@ -3,6 +3,7 @@ import {
   expect,
   Fixtures,
   Locator,
+  Page,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
   test as base,
@@ -13,8 +14,16 @@ import dappwright, { Dappwright, MetaMaskWallet } from '@tenkeylabs/dappwright';
 interface TestFixtures {
   context: BrowserContext;
   metamask: Dappwright;
-  toast: Locator;
+  toast: ReturnType<typeof getToastFixture>;
 }
+
+const getToastFixture = (page: Page) => {
+  return {
+    get: (name: string | RegExp) => {
+      return page.getByRole('alert').last().getByText(name);
+    },
+  };
+};
 
 const testFixtures: Fixtures<
   TestFixtures,
@@ -41,7 +50,7 @@ const testFixtures: Fixtures<
     // await metamask.unlock();
   },
   toast: async ({ page }, use) => {
-    const toast = await page.getByRole('alert').last();
+    const toast = getToastFixture(page);
 
     await use(toast);
   },
@@ -52,7 +61,7 @@ export const test = base.extend<TestFixtures>(testFixtures);
 test.describe.configure({ mode: 'serial' }); // Avoid colliding browser sessions
 
 // Goerli
-const network = {
+export const network = {
   networkName: 'goerli',
   rpc: 'https://goerli.blockpi.network/v1/rpc/public',
   chainId: 5,
@@ -83,6 +92,8 @@ export async function connectWallet(page: Page, metamask: Dappwright) {
   await page.goto('http://localhost:8080/#/' + network.networkName, {
     timeout: 30000,
   });
+
+  await metamask.page.bringToFront();
 
   await metamask.unlock('testingbal123');
   page.bringToFront();
