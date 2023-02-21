@@ -42,3 +42,15 @@ test('Add liquidity to Weighted pool', async ({ page, metamask, toast }) => {
   });
   expect(await toast.getByText(/Add Liquidity confirmed/i)).toBeVisible();
 });
+
+test('Stake Weighted pool', async ({ page, metamask, toast }) => {
+  // todo
+});
+
+test('Unstake Weighted pool', async ({ page, metamask, toast }) => {
+  // todo
+});
+
+test('Withdraw from Weighted pool', async ({ page, metamask, toast }) => {
+  // todo
+});
