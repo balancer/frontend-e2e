@@ -1,11 +1,11 @@
 import { expect } from '@playwright/test';
 import { connectWallet, test } from '../fixtures/testFixtures';
 
-test.beforeEach(async ({ page, metamask }) => {
-  await connectWallet(page, metamask);
-});
-
 test.describe('Pool page', () => {
+  test.beforeEach(async ({ page, metamask }) => {
+    await connectWallet(page, metamask);
+  });
+
   test('Add liquidity to Weighted pool', async ({ page, metamask, toast }) => {
     // Click the weighted pool cell in the pools table
     await page.getByRole('cell', { name: 'WBTC 50% WETH 50%' }).click();

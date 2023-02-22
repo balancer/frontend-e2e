@@ -38,7 +38,7 @@ export default class ToastPage {
   public get addLiquidityToast(): TransactionToast {
     return {
       pending: this.getToast(/Add Liquidity pending/i),
-      confirmed: this.getToast(/Add Liquidity confirmed/i),
+      confirmed: this.getToast(/Add liquidity Confirmed/i),
     };
   }
 

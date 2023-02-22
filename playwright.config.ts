@@ -26,7 +26,7 @@ const config: PlaywrightTestConfig = {
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  retries: 1,
+  retries: 2,
   // Parallel tests don't work with Dappwright
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */

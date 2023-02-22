@@ -2,10 +2,11 @@ import { expect, Page } from '@playwright/test';
 import { Dappwright } from '@tenkeylabs/dappwright';
 import { connectWallet, test } from '../fixtures/testFixtures';
 
-test.beforeEach(async ({ page, metamask }) => {
-  await connectWallet(page, metamask);
-});
 test.describe('Swap page', () => {
+  test.beforeEach(async ({ page, metamask }) => {
+    await connectWallet(page, metamask);
+  });
+
   test('Swap ETH to USDC', async ({ page, metamask, toast }) => {
     // Go to swap
     await page.getByRole('link', { name: 'Swap' }).click();

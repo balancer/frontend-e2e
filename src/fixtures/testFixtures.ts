@@ -58,7 +58,8 @@ const testFixtures: Fixtures<
 
 export const test = base.extend<TestFixtures>(testFixtures);
 
-test.describe.configure({ mode: 'serial' }); // Avoid colliding browser sessions
+// If one of the tests fails, all subsequent tests are skipped. All tests in the group are retried together.
+test.describe.configure({ mode: 'serial' });
 
 // Goerli
 export const network = {
