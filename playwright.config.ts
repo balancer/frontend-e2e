@@ -11,8 +11,8 @@ import { devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
-  globalSetup: require.resolve('./global-setup'),
-  testDir: './tests',
+  globalSetup: require.resolve('./src/global-setup'),
+  testDir: './src/tests',
   /* Maximum time one test can run for is 2 minutes */
   timeout: 60 * 1000 * 2,
   expect: {
@@ -26,9 +26,7 @@ const config: PlaywrightTestConfig = {
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-
   retries: 1,
-
   // Parallel tests don't work with Dappwright
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */

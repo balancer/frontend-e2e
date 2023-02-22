@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { connectWallet, test } from './fixtures/testFixtures';
+import { connectWallet, test } from '../fixtures/testFixtures';
 
 test.beforeEach(async ({ page, metamask }) => {
   await connectWallet(page, metamask);
@@ -33,10 +33,10 @@ test.describe('Pool page', () => {
     ).toBeDisabled();
 
     // Check the Add Liquidity pending toast shows up
-    await toast.waitUntilVisible(/Add Liquidity pending/i);
+    await toast.verifyToastVisibility(toast.addLiquidityToast.pending);
 
     // Check the Add Liquidity confirmed toast shows up
-    await toast.waitUntilVisible(/Add Liquidity confirmed/i);
+    await toast.verifyToastVisibility(toast.addLiquidityToast.confirmed);
   });
 
   test('Stake Weighted pool', async ({ page, metamask, toast, modal }) => {
@@ -55,10 +55,10 @@ test.describe('Pool page', () => {
     await metamask.confirmTransaction();
 
     // Check the Stake pending toast shows up
-    toast.waitUntilVisible(/Stake pending/i);
+    await toast.verifyToastVisibility(toast.stakeToast.pending);
 
     // Check the Stake confirmed toast shows up
-    await toast.waitUntilVisible(/Stake confirmed/i);
+    await toast.verifyToastVisibility(toast.stakeToast.confirmed);
   });
 
   test('Unstake Weighted pool', async ({ page, metamask, toast, modal }) => {
@@ -77,10 +77,10 @@ test.describe('Pool page', () => {
     await metamask.confirmTransaction();
 
     // Check the Unstake pending toast shows up
-    await toast.waitUntilVisible(/Unstake pending/i);
+    await toast.verifyToastVisibility(toast.unstakeToast.pending);
 
     // Check the Unstake confirmed toast shows up
-    await toast.waitUntilVisible(/Unstake confirmed/i);
+    await toast.verifyToastVisibility(toast.unstakeToast.confirmed);
   });
 
   test('Withdraw from Weighted pool', async ({ page, metamask, toast }) => {
@@ -104,9 +104,9 @@ test.describe('Pool page', () => {
     ).toBeDisabled();
 
     // Check the Withdraw pending toast shows up
-    await toast.waitUntilVisible(/Withdraw pending/i);
+    await toast.verifyToastVisibility(toast.withdrawToast.pending);
 
     // Check the Withdraw confirmed toast shows up
-    await toast.waitUntilVisible(/Withdraw confirmed/i);
+    await toast.verifyToastVisibility(toast.withdrawToast.confirmed);
   });
 });

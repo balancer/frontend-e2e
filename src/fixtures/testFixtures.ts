@@ -9,30 +9,14 @@ import {
 } from '@playwright/test';
 
 import dappwright, { Dappwright, MetaMaskWallet } from '@tenkeylabs/dappwright';
+import ToastPage from '../pages/Toast.page';
 
 interface TestFixtures {
   context: BrowserContext;
   metamask: Dappwright;
-  toast: ReturnType<typeof getToastFixture>;
+  toast: ToastPage;
   modal: ReturnType<typeof getModalFixture>;
 }
-
-const getToastFixture = (page: Page) => {
-  function get(name: string | RegExp) {
-    return page.getByRole('alert').last().getByText(name);
-  }
-  return {
-    get,
-    waitUntilVisible: async (name: string | RegExp) => {
-      await get(name).waitFor({
-        state: 'visible',
-        // Increase timeout while waiting for the Add Liquidity to be confirmed
-        timeout: 60000,
-      });
-      expect(await get(name)).toBeVisible();
-    },
-  };
-};
 
 const getModalFixture = (page: Page) => {
   return page.getByRole('dialog');
@@ -63,7 +47,7 @@ const testFixtures: Fixtures<
     // await metamask.unlock();
   },
   toast: async ({ page }, use) => {
-    const toast = getToastFixture(page);
+    const toast = new ToastPage(page);
     await use(toast);
   },
   modal: async ({ page }, use) => {

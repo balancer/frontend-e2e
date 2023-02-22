@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import { Dappwright } from '@tenkeylabs/dappwright';
-import { connectWallet, test } from './fixtures/testFixtures';
+import { connectWallet, test } from '../fixtures/testFixtures';
 
 test.beforeEach(async ({ page, metamask }) => {
   await connectWallet(page, metamask);
@@ -22,15 +22,9 @@ test.describe('Swap page', () => {
     await metamask.confirmTransaction();
 
     // Check the Swap pending toast shows up
-    expect(await toast.get(/Swap pending/i)).toBeVisible();
+    await toast.verifyToastVisibility(toast.swapToast.pending);
 
     // Check the Swap confirmed toast shows up
-    await toast.get(/Swap confirmed/i).waitFor({
-      state: 'visible',
-      // Increase timeout while waiting for the Swap to be confirmed
-      timeout: 60000,
-    });
-
-    expect(await toast.get(/Swap confirmed/i)).toBeVisible();
+    await toast.verifyToastVisibility(toast.swapToast.confirmed);
   });
 });
