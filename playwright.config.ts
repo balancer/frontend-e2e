@@ -30,9 +30,7 @@ const config: PlaywrightTestConfig = {
   // Parallel tests don't work with Dappwright
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI
-    ? [['github'], ['list'], ['html']]
-    : [['list'], ['html']],
+  reporter: process.env.CI ? [['github'], ['list'], ['html']] : [['list'], ['html']],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     // TODO: Debug why video doesn't work with dappwright
