@@ -16,6 +16,18 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     '@typescript-eslint/no-explicit-any': 'off',
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['@playwright/test'],
+            importNames: ['test', 'expect'],
+            message: 'Please import "test" and "expect" from "src/fixtures" instead.',
+          },
+        ],
+      },
+    ],
   },
   parserOptions: {
     ecmaVersion: 'latest',

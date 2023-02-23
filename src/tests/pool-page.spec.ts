@@ -1,36 +1,34 @@
-import { expect } from '@playwright/test';
-import { connectWallet, test } from '../fixtures/testFixtures';
+import { test, expect } from '../fixtures/testFixtures';
 
 test.describe('Pool page', () => {
-  test.beforeEach(async ({ page, metamask }) => {
-    await connectWallet(page, metamask);
+  test.beforeEach(async ({ header, poolPage }) => {
+    // WBTC 50% WETH 50% in Goerli
+    await poolPage.goto('0x16faf9f73748013155b7bc116a3008b57332d1e600020000000000000000005b');
+    await header.connectWallet();
   });
 
-  test('Add liquidity to Weighted pool', async ({ page, metamask, toast }) => {
-    // Click the weighted pool cell in the pools table
-    await page.getByRole('cell', { name: 'WBTC 50% WETH 50%' }).click();
-
+  test('Add liquidity to Weighted pool', async ({
+    metamask,
+    toast,
+    poolPage,
+    addLiquidityPage,
+  }) => {
     // Go to Add Liquidity page
-    await page.getByRole('link', { name: /Add Liquidity/i }).click();
+    await poolPage.clickAddLiquidityLink();
 
-    // Wait for the page and form to load
-    const form = await page.getByTestId('add-liquidity-form');
-
-    // Type in the amount of ETH to add
-    await form.getByLabel(/Amount of: ETH/i).type('0.0001');
+    // Type the amount of ETH to add
+    await addLiquidityPage.typeToInput('ETH', '0.0001');
 
     // Click the preview button
-    await page.getByRole('button', { name: /Preview/i }).click();
+    await addLiquidityPage.clickPreviewButton();
 
     // Click the confirm button
-    await page.getByRole('button', { name: /Add Liquidity/i }).click();
+    await addLiquidityPage.clickConfirmButton();
 
     await metamask.confirmTransaction();
 
     // Check the button is disabled and loading
-    expect(
-      await page.getByRole('button', { name: /Confirming.../i })
-    ).toBeDisabled();
+    await addLiquidityPage.verifyConfirmButtonDisabled();
 
     // Check the Add Liquidity pending toast shows up
     await toast.verifyToastVisibility(toast.addLiquidityToast.pending);
@@ -39,15 +37,12 @@ test.describe('Pool page', () => {
     await toast.verifyToastVisibility(toast.addLiquidityToast.confirmed);
   });
 
-  test('Stake Weighted pool', async ({ page, metamask, toast, modal }) => {
-    // Click the weighted pool cell in the pools table
-    await page.getByRole('cell', { name: 'WBTC 50% WETH 50%' }).click();
-
+  test('Stake Weighted pool', async ({ poolPage, metamask, toast, modal }) => {
     // Open the staking menu
-    await page.getByRole('button', { name: /Staking incentives/i }).click();
+    await poolPage.clickStakingMenu();
 
-    // Click the Stake button
-    await page.getByRole('button', { name: /^Stake$/i }).click();
+    // Open the stake modal
+    await poolPage.openStakeModal();
 
     // Click the stake button from modal
     modal.getByRole('button', { name: /Stake/i }).click();
@@ -61,15 +56,12 @@ test.describe('Pool page', () => {
     await toast.verifyToastVisibility(toast.stakeToast.confirmed);
   });
 
-  test('Unstake Weighted pool', async ({ page, metamask, toast, modal }) => {
-    // Click the weighted pool cell in the pools table
-    await page.getByRole('cell', { name: 'WBTC 50% WETH 50%' }).click();
-
+  test('Unstake Weighted pool', async ({ poolPage, metamask, toast, modal }) => {
     // Open the staking menu
-    await page.getByRole('button', { name: /Staking incentives/i }).click();
+    await poolPage.clickStakingMenu();
 
-    // Click the Stake button
-    await page.getByRole('button', { name: /^Unstake$/i }).click();
+    // Click the Unstake button
+    await poolPage.openUnstakeModal();
 
     // Click the stake button from modal
     modal.getByRole('button', { name: /Unstake/i }).click();
@@ -83,25 +75,20 @@ test.describe('Pool page', () => {
     await toast.verifyToastVisibility(toast.unstakeToast.confirmed);
   });
 
-  test('Withdraw from Weighted pool', async ({ page, metamask, toast }) => {
-    // Click the weighted pool cell in the pools table
-    await page.getByRole('cell', { name: 'WBTC 50% WETH 50%' }).click();
-
+  test('Withdraw from Weighted pool', async ({ poolPage, withdrawPage, metamask, toast }) => {
     // Go to Withdraw page
-    await page.getByRole('link', { name: /Withdraw/i }).click();
+    await poolPage.clickWithdrawLink();
 
     // Click the preview button
-    await page.getByRole('button', { name: /Preview/i }).click();
+    await withdrawPage.clickPreviewButton();
 
     // Click the confirm button
-    await page.getByRole('button', { name: /Withdraw/i }).click();
+    await withdrawPage.clickConfirmButton();
 
     await metamask.confirmTransaction();
 
     // Check the button is disabled and loading
-    expect(
-      await page.getByRole('button', { name: /Confirming.../i })
-    ).toBeDisabled();
+    await withdrawPage.verifyConfirmButtonDisabled();
 
     // Check the Withdraw pending toast shows up
     await toast.verifyToastVisibility(toast.withdrawToast.pending);

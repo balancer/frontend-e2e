@@ -1,20 +1,30 @@
 import {
   BrowserContext,
-  expect,
   Fixtures,
   Page,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
-  test as base,
+  // eslint-disable-next-line no-restricted-imports
+  test as testBase,
 } from '@playwright/test';
 
 import dappwright, { Dappwright, MetaMaskWallet } from '@tenkeylabs/dappwright';
 import ToastPage from '../pages/Toast.page';
+import SwapPage from '../pages/Swap.page';
+import HeaderPage from '../pages/Header.page';
+import PoolPage from '../pages/Pool.page';
+import AddLiquidityPage from '../pages/AddLiquidity.page';
+import WithdrawPage from '../pages/Withdraw.page';
 
 interface TestFixtures {
   context: BrowserContext;
   metamask: Dappwright;
   toast: ToastPage;
+  swapPage: SwapPage;
+  header: HeaderPage;
+  poolPage: PoolPage;
+  addLiquidityPage: AddLiquidityPage;
+  withdrawPage: WithdrawPage;
   modal: ReturnType<typeof getModalFixture>;
 }
 
@@ -22,12 +32,7 @@ const getModalFixture = (page: Page) => {
   return page.getByRole('dialog');
 };
 
-const testFixtures: Fixtures<
-  TestFixtures,
-  unknown,
-  PlaywrightTestArgs,
-  PlaywrightWorkerArgs
-> = {
+const testFixtures: Fixtures<TestFixtures, unknown, PlaywrightTestArgs, PlaywrightWorkerArgs> = {
   // eslint-disable-next-line no-empty-pattern
   context: async ({}, use) => {
     // Launch context with the same session from global-setup
@@ -50,13 +55,34 @@ const testFixtures: Fixtures<
     const toast = new ToastPage(page);
     await use(toast);
   },
+  swapPage: async ({ page }, use) => {
+    const swapPage = new SwapPage(page);
+    await use(swapPage);
+  },
+  poolPage: async ({ page }, use) => {
+    const poolPage = new PoolPage(page);
+    await use(poolPage);
+  },
+  addLiquidityPage: async ({ page }, use) => {
+    const addLiquidityPage = new AddLiquidityPage(page);
+    await use(addLiquidityPage);
+  },
+  withdrawPage: async ({ page }, use) => {
+    const withdrawPage = new WithdrawPage(page);
+    await use(withdrawPage);
+  },
+  header: async ({ page, metamask }, use) => {
+    const header = new HeaderPage(page, metamask);
+    await use(header);
+  },
   modal: async ({ page }, use) => {
     const toast = getModalFixture(page);
     await use(toast);
   },
 };
 
-export const test = base.extend<TestFixtures>(testFixtures);
+export const test = testBase.extend<TestFixtures>(testFixtures);
+export const expect = test.expect;
 
 // If one of the tests fails, all subsequent tests are skipped. All tests in the group are retried together.
 test.describe.configure({ mode: 'serial' });
@@ -76,64 +102,3 @@ export const network = {
 //   chainId: 137,
 //   symbol: 'Matic',
 // };
-
-export async function connectWallet(page: Page, metamask: Dappwright) {
-  const getAccountButton = () =>
-    page.getByRole('button', {
-      name:
-        // Eg. 0x1234...1234
-        /0x.{4}(...).{4}/i,
-    });
-  const getLoadingAccountButton = () =>
-    page.getByRole('button', {
-      name: /Connecting.../i,
-    });
-  const getMismatchNetworkMessage = () => page.getByText(/Please switch to /i);
-
-  await page.goto('http://localhost:8080/#/' + network.networkName, {
-    timeout: 30000,
-  });
-
-  await metamask.page.bringToFront();
-
-  await metamask.unlock('testingbal123');
-  page.bringToFront();
-
-  // Wait for a moment for the page to load, to see if the wallet is connected automatically
-  await page.waitForTimeout(1000);
-
-  const loadingWalletButtonHidden = await getLoadingAccountButton().isHidden();
-  const accountButtonHidden = await getAccountButton().isHidden();
-
-  // Check if the wallet is not yet connected
-  if (accountButtonHidden && loadingWalletButtonHidden) {
-    await page.getByRole('button', { name: 'Connect wallet' }).first().click();
-
-    await page.getByRole('button', { name: 'Metamask' }).click({ force: true });
-    // Approve the connection when MetaMask pops up
-    await metamask.approve();
-
-    // // Wait for the dapp to redirect
-    // await page.waitForURL('http://localhost:8080/#/' + network.networkName);
-
-    // Check the wallet button in nav
-    expect(await getAccountButton()).toBeVisible();
-  }
-
-  if (await getMismatchNetworkMessage().isVisible()) {
-    const hasNetwork = await metamask.hasNetwork(network.networkName);
-
-    if (!hasNetwork) {
-      await metamask.switchNetwork(network.networkName);
-    } else if (network.networkName === 'polygon') {
-      // Add Polygon network if not yet added
-      await metamask.addNetwork(network);
-    }
-
-    // Switch to correct network
-    await page.bringToFront();
-    // Temporary fix to make the mismatch network message disappear
-    await page.reload();
-  }
-  expect(await getMismatchNetworkMessage()).toBeHidden();
-}

@@ -1,5 +1,5 @@
-import { expect } from '@playwright/test';
 import { Locator, Page } from 'playwright-core';
+import { expect } from '../fixtures/testFixtures';
 
 interface TransactionToast {
   pending: Locator;

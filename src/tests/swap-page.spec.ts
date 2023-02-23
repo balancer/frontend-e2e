@@ -1,25 +1,25 @@
-import { expect, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { Dappwright } from '@tenkeylabs/dappwright';
-import { connectWallet, test } from '../fixtures/testFixtures';
+import { test, expect } from '../fixtures/testFixtures';
 
 test.describe('Swap page', () => {
-  test.beforeEach(async ({ page, metamask }) => {
-    await connectWallet(page, metamask);
+  test.beforeEach(async ({ swapPage, header }) => {
+    // Go to swap
+    await swapPage.goto();
+    await header.connectWallet();
   });
 
-  test('Swap ETH to USDC', async ({ page, metamask, toast }) => {
-    // Go to swap
-    await page.getByRole('link', { name: 'Swap' }).click();
-
-    await page.getByLabel(/Token Out/i).type('0.1');
+  test('Swap ETH to USDC', async ({ swapPage, metamask, toast }) => {
+    await swapPage.typeToTokenOutInput('0.1');
 
     // Accept the high price impact
     // Not needed on Polygon
-    await page.getByRole('button', { name: /Accept/i }).click();
+    await swapPage.acceptHighPriceImpact();
 
-    await page.getByRole('button', { name: /Preview/i }).click();
+    await swapPage.openPreviewModal();
 
-    await page.getByRole('button', { name: /Confirm Swap/i }).click();
+    await swapPage.confirmSwap();
+
     await metamask.confirmTransaction();
 
     // Check the Swap pending toast shows up
