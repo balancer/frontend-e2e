@@ -1,7 +1,6 @@
 import {
   BrowserContext,
   Fixtures,
-  Page,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
   // eslint-disable-next-line no-restricted-imports
@@ -15,6 +14,7 @@ import HeaderPage from '../pages/Header.page';
 import PoolPage from '../pages/Pool.page';
 import AddLiquidityPage from '../pages/AddLiquidity.page';
 import WithdrawPage from '../pages/Withdraw.page';
+import ModalPage from '../pages/Modal.page';
 
 interface TestFixtures {
   context: BrowserContext;
@@ -25,12 +25,8 @@ interface TestFixtures {
   poolPage: PoolPage;
   addLiquidityPage: AddLiquidityPage;
   withdrawPage: WithdrawPage;
-  modal: ReturnType<typeof getModalFixture>;
+  modal: ModalPage;
 }
-
-const getModalFixture = (page: Page) => {
-  return page.getByRole('dialog');
-};
 
 const testFixtures: Fixtures<TestFixtures, unknown, PlaywrightTestArgs, PlaywrightWorkerArgs> = {
   // eslint-disable-next-line no-empty-pattern
@@ -48,8 +44,6 @@ const testFixtures: Fixtures<TestFixtures, unknown, PlaywrightTestArgs, Playwrig
     const metamask = await dappwright.getWallet('metamask', context);
 
     await use(metamask);
-    // Unlock the wallet
-    // await metamask.unlock();
   },
   toast: async ({ page }, use) => {
     const toast = new ToastPage(page);
@@ -76,29 +70,30 @@ const testFixtures: Fixtures<TestFixtures, unknown, PlaywrightTestArgs, Playwrig
     await use(header);
   },
   modal: async ({ page }, use) => {
-    const toast = getModalFixture(page);
-    await use(toast);
+    const modal = new ModalPage(page);
+    await use(modal);
   },
 };
 
 export const test = testBase.extend<TestFixtures>(testFixtures);
 export const expect = test.expect;
 
-// If one of the tests fails, all subsequent tests are skipped. All tests in the group are retried together.
+// If one of the tests fails, all subsequent tests are skipped.
+// All tests in the group are retried together.
 test.describe.configure({ mode: 'serial' });
 
-// Goerli
-export const network = {
+const goerli = {
   networkName: 'goerli',
   rpc: 'https://goerli.blockpi.network/v1/rpc/public',
   chainId: 5,
   symbol: 'ETH',
 };
 
-// Polygon
-// const network = {
+// const polygon = {
 //   networkName: 'polygon',
 //   rpc: 'https://polygon-rpc.com',
 //   chainId: 137,
 //   symbol: 'Matic',
 // };
+
+export const network = goerli;

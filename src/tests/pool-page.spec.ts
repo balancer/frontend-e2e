@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures/testFixtures';
+import { test } from '../fixtures/testFixtures';
 
 test.describe('Pool page', () => {
   test.beforeEach(async ({ header, poolPage }) => {
@@ -37,15 +37,14 @@ test.describe('Pool page', () => {
     await toast.verifyToastVisibility(toast.addLiquidityToast.confirmed);
   });
 
-  test('Stake Weighted pool', async ({ poolPage, metamask, toast, modal }) => {
+  test('Stake Weighted pool', async ({ poolPage, metamask, toast }) => {
     // Open the staking menu
     await poolPage.clickStakingMenu();
 
     // Open the stake modal
     await poolPage.openStakeModal();
 
-    // Click the stake button from modal
-    modal.getByRole('button', { name: /Stake/i }).click();
+    await poolPage.confirmStake();
 
     await metamask.confirmTransaction();
 
@@ -56,15 +55,14 @@ test.describe('Pool page', () => {
     await toast.verifyToastVisibility(toast.stakeToast.confirmed);
   });
 
-  test('Unstake Weighted pool', async ({ poolPage, metamask, toast, modal }) => {
+  test('Unstake Weighted pool', async ({ poolPage, metamask, toast }) => {
     // Open the staking menu
     await poolPage.clickStakingMenu();
 
     // Click the Unstake button
     await poolPage.openUnstakeModal();
 
-    // Click the stake button from modal
-    modal.getByRole('button', { name: /Unstake/i }).click();
+    await poolPage.confirmUnstake();
 
     await metamask.confirmTransaction();
 

@@ -1,7 +1,5 @@
-import { Locator, Page } from 'playwright-core';
+import { Page } from 'playwright-core';
 import { expect } from '../fixtures/testFixtures';
-import { network } from '../fixtures/testFixtures';
-import { gotoPath } from '../helpers';
 
 export default class SwapPage {
   private page: Page;

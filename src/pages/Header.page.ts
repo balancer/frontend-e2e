@@ -14,7 +14,7 @@ export default class HeaderPage {
   public getAccountButton = () =>
     this.page.getByRole('button', {
       name:
-        // Eg. 0x1234...1234
+        // Truncated account eg. 0x1234...1234
         /0x.{4}(...).{4}/i,
     });
 
@@ -46,9 +46,6 @@ export default class HeaderPage {
       await this.page.getByRole('button', { name: 'Metamask' }).click({ force: true });
       // Approve the connection when MetaMask pops up
       await this.metamask.approve();
-
-      // // Wait for the dapp to redirect
-      // await this.page.waitForURL('http://localhost:8080/#/' + network.networkName);
 
       // Check the wallet button in nav
       expect(await this.getAccountButton()).toBeVisible();

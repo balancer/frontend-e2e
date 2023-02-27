@@ -1,11 +1,14 @@
 import { Page, Response } from 'playwright-core';
 import { gotoPath } from '../helpers';
+import ModalPage from './Modal.page';
 
 export default class PoolPage {
   private page: Page;
+  private modal: ModalPage;
 
   constructor(page: Page) {
     this.page = page;
+    this.modal = new ModalPage(page);
   }
 
   public goto(poolId): Promise<Response> {
@@ -26,6 +29,19 @@ export default class PoolPage {
 
   public openStakeModal(): Promise<void> {
     return this.page.getByRole('button', { name: /^Stake$/i }).click();
+  }
+
+  public confirmStake(): Promise<void> {
+    // Click the stake button from modal
+    return this.modal.get().getByRole('button', { name: /Stake/i }).click();
+  }
+
+  public confirmUnstake(): Promise<void> {
+    // Click the Unstake button from modal
+    return this.modal
+      .get()
+      .getByRole('button', { name: /Unstake/i })
+      .click();
   }
 
   public openUnstakeModal(): Promise<void> {

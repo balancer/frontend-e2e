@@ -1,6 +1,4 @@
-import { Page } from '@playwright/test';
-import { Dappwright } from '@tenkeylabs/dappwright';
-import { test, expect } from '../fixtures/testFixtures';
+import { test } from '../fixtures/testFixtures';
 
 test.describe('Swap page', () => {
   test.beforeEach(async ({ swapPage, header }) => {
@@ -12,13 +10,12 @@ test.describe('Swap page', () => {
   test('Swap ETH to USDC', async ({ swapPage, metamask, toast }) => {
     await swapPage.typeToTokenOutInput('0.1');
 
-    // Accept the high price impact
-    // Not needed on Polygon
+    // Accept the high price impact is needed on Goerli
     await swapPage.acceptHighPriceImpact();
 
-    await swapPage.openPreviewModal();
+    await swapPage.showSwapPreview();
 
-    await swapPage.confirmSwap();
+    await swapPage.clickConfirmSwap();
 
     await metamask.confirmTransaction();
 
