@@ -13,7 +13,7 @@ test.describe('Pool page', () => {
     poolPage,
     addLiquidityPage,
   }) => {
-    // Go to Add Liquidity page
+    // Go to the pool page
     await poolPage.clickAddLiquidityLink();
 
     // Type the amount of ETH to add
