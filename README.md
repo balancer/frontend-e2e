@@ -49,3 +49,4 @@ Drop the downloaded test artifact zip file to: `https://trace.playwright.dev/` t
 ## Dappwright caveats
 
 1. Tests can not be run parallel in order to avoid colliding browser sessions
+2. In CI first test can take up to a minute to start, because the Metamask is being set up, so test timeout is set to 2 minutes in `playwright.config.ts`
