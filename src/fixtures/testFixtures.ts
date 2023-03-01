@@ -84,12 +84,11 @@ test.describe.configure({ mode: 'serial' });
 
 // test.beforeAll(async ({ metamask, page }) => {
 //   // Add Polygon network here if you need it
-//   // Caveats:
-//   // 1. You should check if network is already added (test retry)
-//   // 2. Check if metamask is already unlocked (calling unlock() will crash if it already is)
 
+//   //  TODO: Check if metamask is already unlocked (calling will crash if it already is)
 //   await metamask.unlock('testingbal123');
 
+//   // TODO: You should check if network is already added
 //   await metamask.addNetwork({
 //     networkName: 'polygon',
 //     rpc: 'https://polygon-rpc.com',
