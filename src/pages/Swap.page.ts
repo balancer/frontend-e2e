@@ -20,7 +20,10 @@ export default class SwapPage {
   }
 
   public acceptHighPriceImpact() {
-    return this.page.getByRole('button', { name: /Accept/i }).click();
+    return this.page.getByRole('button', { name: /Accept/i }).click({
+      // Loading the swap preview can take a while on Goerli
+      timeout: 20000,
+    });
   }
 
   public showSwapPreview() {
