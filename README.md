@@ -1,4 +1,4 @@
-# Balancer Frontend testing with Synpress
+# Balancer Frontend testing with Dappwright
 
 - [Dappwright docs](https://github.com/TenKeyLabs/dappwright)
 - [Dappwright api](https://github.com/TenKeyLabs/dappwright/blob/main/docs/API.md)
