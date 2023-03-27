@@ -35,6 +35,8 @@ const testFixtures: Fixtures<TestFixtures, unknown, PlaywrightTestArgs, Playwrig
     const { browserContext } = await dappwright.launch('', {
       version: MetaMaskWallet.recommendedVersion,
       wallet: 'metamask',
+      // Headless tests only in CI
+      headless: !!process.env.CI,
     });
 
     await use(browserContext);

@@ -15,8 +15,21 @@ async function globalSetup(config: FullConfig) {
     password: process.env.PASSWORD,
     seed: process.env.SEED_PHRASE,
     version: MetaMaskWallet.recommendedVersion,
+    // Headless tests only in CI
+    headless: !!process.env.CI,
   });
 
+  const goerli = {
+    networkName: 'goerli',
+    rpc: 'https://goerli.blockpi.network/v1/rpc/public',
+    chainId: 5,
+    symbol: 'ETH',
+  };
+
+  await metamask.addNetwork(goerli);
+  // await metamask.switchNetwork('goerli');
+
+  console.log('Global setup finished installing metamask with goerli network');
   await context.close();
 }
 

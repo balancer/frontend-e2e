@@ -20,13 +20,14 @@ const config: PlaywrightTestConfig = {
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: 10000,
+    timeout: 15000,
   },
   // Parallel tests don't work with Dappwright
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  retries: 2,
+  /* Retry once only in CI */
+  retries: process.env.CI ? 1 : 0,
   // Parallel tests don't work with Dappwright
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -36,10 +37,9 @@ const config: PlaywrightTestConfig = {
     // TODO: Debug why video doesn't work with dappwright
     video: 'retain-on-failure',
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
-    actionTimeout: 10000,
+    actionTimeout: 15000,
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
-
+    baseURL: process.env.PREVIEW_BASE_URL || 'http://localhost:8080',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on',
   },
@@ -49,7 +49,6 @@ const config: PlaywrightTestConfig = {
     {
       name: 'chromium',
       use: {
-        headless: true,
         ...devices['Desktop Chrome'],
       },
     },
