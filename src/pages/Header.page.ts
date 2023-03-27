@@ -66,7 +66,7 @@ export default class HeaderPage {
       // Switch to correct network
       await this.page.bringToFront();
       // Temporary fix to make the mismatch network message disappear
-      await this.page.reload();
+      // await this.page.reload();
     }
     expect(await this.getMismatchNetworkMessage()).toBeHidden();
   }

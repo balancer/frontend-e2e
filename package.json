@@ -10,6 +10,7 @@
     "playwright:test": "npx playwright test --trace on",
     "playwright:test:debug": "npx playwright test --debug",
     "playwright:ci": "xvfb-run npx playwright test --trace on",
+    "playwright:ci:local": "CI=true npx playwright test",
     "playwright:codegen": "npx playwright codegen localhost:8080",
     "link:dappwright": "cd ../dappwright && npm run build && cd ../frontend-e2e && npm link ../dappwright"
   },

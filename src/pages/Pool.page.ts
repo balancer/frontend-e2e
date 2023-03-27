@@ -9,9 +9,10 @@ export default class PoolPage {
   constructor(page: Page) {
     this.page = page;
     this.modal = new ModalPage(page);
+    this.page.bringToFront();
   }
 
-  public goto(poolId): Promise<Response> {
+  public goto(poolId): Promise<Response | null> {
     return gotoPath(`pool/${poolId}`, this.page);
   }
 
