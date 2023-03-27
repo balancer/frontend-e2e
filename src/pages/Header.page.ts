@@ -30,7 +30,7 @@ export default class HeaderPage {
   public async connectWallet() {
     await this.metamask.page.bringToFront();
 
-    await this.metamask.unlock('testingbal123');
+    await this.metamask.unlock(process.env.PASSWORD);
     this.page.bringToFront();
 
     // Wait for a moment for the page to load, to see if the wallet is connected automatically
