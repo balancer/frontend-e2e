@@ -10,7 +10,8 @@
     "playwright:test": "npx playwright test --trace on",
     "playwright:test:debug": "npx playwright test --debug",
     "playwright:ci": "xvfb-run npx playwright test --trace on",
-    "playwright:codegen": "npx playwright codegen localhost:8080"
+    "playwright:codegen": "npx playwright codegen localhost:8080",
+    "link:dappwright": "cd ../dappwright && npm run build && cd ../frontend-e2e && npm link ../dappwright"
   },
   "repository": {
     "type": "git",
@@ -23,19 +24,19 @@
   },
   "homepage": "https://github.com/balancer-labs/frontend-e2e#readme",
   "devDependencies": {
-    "@playwright/test": "^1.30.0",
-    "@tenkeylabs/dappwright": "^2.2.5",
-    "@typescript-eslint/eslint-plugin": "^5.33.1",
-    "@typescript-eslint/parser": "^5.33.1",
+    "@playwright/test": "^1.32.0",
+    "@tenkeylabs/dappwright": "^2.2.6",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
     "dotenv": "^16.0.3",
-    "eslint": "^8.22.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard-with-typescript": "^22.0.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
     "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.0",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
-    "typescript": "^4.7.4"
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.6",
+    "typescript": "^5.0.2"
   },
   "lint-staged": {
     "*.{js,ts}": "eslint --cache --fix",
