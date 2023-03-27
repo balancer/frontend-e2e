@@ -9,15 +9,21 @@
 
    - ```sh
         SEED_PHRASE="word1 word2 ... ... etc"
+        PASSWORD="<wallet password>"
+        PREVIEW_BASE_URL="[optional] In case you want to test against a preview URL, for example, a cloudflare one"
      ```
 
-2. Start the [Frontend App](https://github.com/balancer-labs/frontend-v2/) by running: `npm run serve`
+2. If you are not using PREVIEW_BASE_URL, start the [Frontend App](https://github.com/balancer-labs/frontend-v2/) by running: `npm run dev`
 
-3. Once the frontend is up and running, you can start running the Playwright tests:
+3. Once the frontend is up and running, you can start running the Playwright tests (in headed mode):
 
    - `$ npm run playwright:test`
 
-4. After test run is complete, Playwright serves a test report, and it should open up automatically.
+Or in headless (local CI) mode:
+
+   -`$ npm run playwright:ci:local`
+
+1. After test run is complete, Playwright serves a test report, and it should open up automatically.
 
 ## Running in CI
 
