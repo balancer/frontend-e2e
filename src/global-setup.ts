@@ -12,7 +12,7 @@ async function globalSetup(config: FullConfig) {
   const [metamask, page, context] = await dappwright.bootstrap('', {
     wallet: 'metamask',
     showTestNets: true,
-    password: 'testingbal123',
+    password: process.env.PASSWORD,
     seed: process.env.SEED_PHRASE,
     version: MetaMaskWallet.recommendedVersion,
   });
