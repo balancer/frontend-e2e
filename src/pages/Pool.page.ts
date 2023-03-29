@@ -16,6 +16,13 @@ export default class PoolPage {
     return gotoPath(`pool/${poolId}`, this.page);
   }
 
+  public clickPoolWithStMatic(): Promise<void> {
+    return this.page
+      .getByRole('row', { name: /WMATIC stMATIC/i })
+      .getByRole('button', { name: 'stMATIC' })
+      .click();
+  }
+
   public clickAddLiquidityLink(): Promise<void> {
     return this.page.getByRole('link', { name: /Add Liquidity/i }).click();
   }

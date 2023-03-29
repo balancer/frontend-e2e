@@ -1,6 +1,7 @@
 import { Dappwright } from '@tenkeylabs/dappwright';
 import { Locator, Page } from 'playwright-core';
-import { expect, network } from '../fixtures/testFixtures';
+import { expect } from '../fixtures/testFixtures';
+import { gotoPath } from '../helpers';
 
 export default class HeaderPage {
   private page: Page;
@@ -9,6 +10,10 @@ export default class HeaderPage {
   constructor(page: Page, metamask: Dappwright) {
     this.page = page;
     this.metamask = metamask;
+  }
+
+  public async goToMainPage() {
+    return gotoPath('', this.page);
   }
 
   public getAccountButton = () =>
@@ -30,7 +35,21 @@ export default class HeaderPage {
   public async connectWallet() {
     await this.metamask.page.bringToFront();
 
-    await this.metamask.unlock(process.env.PASSWORD);
+    const hasPolygon = await this.metamask.hasNetwork('polygon');
+
+    if (!hasPolygon) {
+      await this.metamask.unlock(process.env.PASSWORD);
+      const networkConfig = {
+        networkName: 'polygon',
+        rpc: 'https://polygon-rpc.com',
+        chainId: 137,
+        symbol: 'Matic',
+      };
+
+      await this.metamask.addNetwork(networkConfig);
+      await this.metamask.switchNetwork('polygon');
+    }
+
     this.page.bringToFront();
 
     // Wait for a moment for the page to load, to see if the wallet is connected automatically
@@ -50,24 +69,5 @@ export default class HeaderPage {
       // Check the wallet button in nav
       expect(await this.getAccountButton()).toBeVisible();
     }
-
-    const mismatchNetworkMessage = await this.getMismatchNetworkMessage();
-
-    if (await mismatchNetworkMessage.isVisible()) {
-      const hasNetwork = await this.metamask.hasNetwork(network.networkName);
-
-      if (!hasNetwork) {
-        await this.metamask.switchNetwork(network.networkName);
-      } else if (network.networkName === 'polygon') {
-        // Add Polygon network if not yet added
-        await this.metamask.addNetwork(network);
-      }
-
-      // Switch to correct network
-      await this.page.bringToFront();
-      // Temporary fix to make the mismatch network message disappear
-      // await this.page.reload();
-    }
-    expect(await this.getMismatchNetworkMessage()).toBeHidden();
   }
 }
