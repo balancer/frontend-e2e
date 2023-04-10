@@ -1,13 +1,17 @@
-import { Locator, Page } from 'playwright-core';
+import { Page } from 'playwright-core';
 import { expect } from '../fixtures/testFixtures';
-import { network } from '../fixtures/testFixtures';
-import { gotoPath } from '../helpers';
 
 export default class SwapPage {
   private page: Page;
 
   constructor(page: Page) {
     this.page = page;
+  }
+
+  public async selectMaxWMatic() {
+    await this.page.getByText(/all tokens/i).click();
+    await this.page.getByText('WMATIC', { exact: true }).click();
+    await this.page.getByRole('button', { name: /max/i }).click();
   }
 
   public clickPreviewButton(): Promise<void> {

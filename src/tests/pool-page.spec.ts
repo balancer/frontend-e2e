@@ -1,29 +1,62 @@
+import { Dappwright } from '@tenkeylabs/dappwright';
 import { test } from '../fixtures/testFixtures';
+import HeaderPage from '../pages/Header.page';
+import PoolPage from '../pages/Pool.page';
+import ToastPage from '../pages/Toast.page';
+import WithdrawPage from '../pages/Withdraw.page';
+
+// Weighted pool WMATIC25% USDC25% WETH25% BAL25%
+const wMaticPoolId = '0x0297e37f1873d2dab4487aa67cd56b58e2f27875000100000000000000000002';
+
+async function goToWMaticPoolFromMainPage(header: HeaderPage, poolPage: PoolPage) {
+  await header.goToMainPage();
+  await header.connectWallet();
+
+  await poolPage.clickPool(wMaticPoolId);
+}
+
+async function goToWMaticPool(header: HeaderPage, poolPage: PoolPage) {
+  await poolPage.goto(wMaticPoolId);
+  await header.connectWallet();
+}
 
 test.describe('Pool page', () => {
-  test.beforeEach(async ({ header, poolPage }) => {
-    // WBTC 50% WETH 50% in Goerli
-    await poolPage.goto('0x16faf9f73748013155b7bc116a3008b57332d1e600020000000000000000005b');
-    await header.connectWallet();
-  });
-
-  test('Add liquidity to Weighted pool', async ({
+  /**
+   * This test visits the portfolio page to check if there's some missing balance in the stMatic pool (due to previous failing test execution)
+   * If there is balance, it will exit the pool to enforce that the next tests are always executed in similar conditions
+   * (and to avoid testing account balance problems)
+   **/
+  test('Enforce clean initial state', async ({
+    header,
+    portfolioPage,
+    poolPage,
+    withdrawPage,
     metamask,
     toast,
-    poolPage,
-    addLiquidityPage,
   }) => {
-    // Go to the pool page
+    await portfolioPage.goto();
+    await header.connectWallet();
+    if (await portfolioPage.hasBalanceInPoolWithWMatic()) {
+      // Temporarily throw an error to understand error frequency
+      // throw new Error('Test account has balance in wMATIC stMATIC pool. Exit is needed.');
+      await portfolioPage.goToPoolWithWMatic();
+      await exitPool(poolPage, withdrawPage, metamask, toast);
+    }
+  });
+
+  test('Join pool', async ({ toast, header, poolPage, addLiquidityPage, metamask }) => {
+    await goToWMaticPoolFromMainPage(header, poolPage);
+
     await poolPage.clickAddLiquidityLink();
 
-    // Type the amount of ETH to add
-    await addLiquidityPage.typeToInput('ETH', '0.0001');
+    await addLiquidityPage.typeToInput('WMATIC', '2');
 
-    // Click the preview button
     await addLiquidityPage.clickPreviewButton();
 
-    // Click the confirm button
-    await addLiquidityPage.clickConfirmButton();
+    // TODO: this step is needed just in certain conditions (can we detect those?)
+    // await addLiquidityPage.clickApproveButton();
+
+    await addLiquidityPage.clickAddLiquidity();
 
     await metamask.confirmTransaction();
 
@@ -37,61 +70,35 @@ test.describe('Pool page', () => {
     await toast.verifyToastVisibility(toast.addLiquidityToast.confirmed);
   });
 
-  test('Stake Weighted pool', async ({ poolPage, metamask, toast }) => {
-    // Open the staking menu
-    await poolPage.clickStakingMenu();
-
-    // Open the stake modal
-    await poolPage.openStakeModal();
-
-    await poolPage.confirmStake();
-
-    await metamask.confirmTransaction();
-
-    // Check the Stake pending toast shows up
-    await toast.verifyToastVisibility(toast.stakeToast.pending);
-
-    // Check the Stake confirmed toast shows up
-    await toast.verifyToastVisibility(toast.stakeToast.confirmed);
-  });
-
-  test('Unstake Weighted pool', async ({ poolPage, metamask, toast }) => {
-    // Open the staking menu
-    await poolPage.clickStakingMenu();
-
-    // Click the Unstake button
-    await poolPage.openUnstakeModal();
-
-    await poolPage.confirmUnstake();
-
-    await metamask.confirmTransaction();
-
-    // Check the Unstake pending toast shows up
-    await toast.verifyToastVisibility(toast.unstakeToast.pending);
-
-    // Check the Unstake confirmed toast shows up
-    await toast.verifyToastVisibility(toast.unstakeToast.confirmed);
-  });
-
-  test('Withdraw from Weighted pool', async ({ poolPage, withdrawPage, metamask, toast }) => {
-    // Go to Withdraw page
-    await poolPage.clickWithdrawLink();
-
-    // Click the preview button
-    await withdrawPage.clickPreviewButton();
-
-    // Click the confirm button
-    await withdrawPage.clickConfirmButton();
-
-    await metamask.confirmTransaction();
-
-    // Check the button is disabled and loading
-    await withdrawPage.verifyConfirmButtonDisabled();
-
-    // Check the Withdraw pending toast shows up
-    await toast.verifyToastVisibility(toast.withdrawToast.pending);
-
-    // Check the Withdraw confirmed toast shows up
-    await toast.verifyToastVisibility(toast.withdrawToast.confirmed);
+  test('Exit pool', async ({ header, poolPage, withdrawPage, metamask, toast }) => {
+    await goToWMaticPool(header, poolPage);
+    await exitPool(poolPage, withdrawPage, metamask, toast);
   });
 });
+
+// Helper used by "Exit pool test" and, optionally, by "Enforce clean initial state" test
+async function exitPool(
+  poolPage: PoolPage,
+  withdrawPage: WithdrawPage,
+  metamask: Dappwright,
+  toast: ToastPage
+) {
+  await poolPage.clickWithdrawLink();
+
+  await withdrawPage.selectMaxWMatic();
+
+  await withdrawPage.clickPreviewButton();
+
+  await withdrawPage.clickConfirmButton();
+
+  await metamask.confirmTransaction();
+
+  // Check the button is disabled and loading
+  await withdrawPage.verifyConfirmButtonDisabled();
+
+  // Check the Withdraw pending toast shows up
+  await toast.verifyToastVisibility(toast.withdrawToast.pending);
+
+  // Check the Withdraw confirmed toast shows up
+  await toast.verifyToastVisibility(toast.withdrawToast.confirmed);
+}

@@ -22,7 +22,7 @@ export default class ToastPage {
     await toast.waitFor({
       state: 'visible',
       // Increase timeout while waiting for the Transaction to be confirmed
-      timeout: 60000,
+      timeout: 90000,
     });
     expect(toast).toBeVisible();
   }

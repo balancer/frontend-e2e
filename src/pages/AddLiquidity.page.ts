@@ -20,8 +20,28 @@ export default class SwapPage {
     return this.page.getByRole('button', { name: /Preview/i }).click();
   }
 
-  public clickConfirmButton(): Promise<void> {
-    return this.page.getByRole('button', { name: /Add Liquidity/i }).click();
+  public async clickApproveButton(): Promise<void> {
+    return this.page
+      .getByRole('button', {
+        name: /approve wmatic for adding liquidity/i,
+      })
+      .click();
+  }
+
+  public async clickAddLiquidity(): Promise<void> {
+    return this.page
+      .getByRole('button', {
+        name: /Add liquidity/i,
+      })
+      .click();
+  }
+
+  public async clickConfirmButton(): Promise<void> {
+    return this.page
+      .getByRole('button', {
+        name: /Confirm/i,
+      })
+      .click();
   }
 
   public async verifyConfirmButtonDisabled(): Promise<void> {

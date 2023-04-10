@@ -7,7 +7,7 @@ import {
   test as testBase,
 } from '@playwright/test';
 
-import dappwright, { Dappwright, MetaMaskWallet } from '@tenkeylabs/dappwright';
+import dappwright, { Dappwright } from '@tenkeylabs/dappwright';
 import ToastPage from '../pages/Toast.page';
 import SwapPage from '../pages/Swap.page';
 import HeaderPage from '../pages/Header.page';
@@ -15,7 +15,10 @@ import PoolPage from '../pages/Pool.page';
 import AddLiquidityPage from '../pages/AddLiquidity.page';
 import WithdrawPage from '../pages/Withdraw.page';
 import ModalPage from '../pages/Modal.page';
+import PortfolioPage from '../pages/Portfolio.page';
+import { metamaskVersion } from '../global-setup';
 
+let sharedContext: BrowserContext;
 interface TestFixtures {
   context: BrowserContext;
   metamask: Dappwright;
@@ -26,25 +29,39 @@ interface TestFixtures {
   addLiquidityPage: AddLiquidityPage;
   withdrawPage: WithdrawPage;
   modal: ModalPage;
+  portfolioPage: PortfolioPage;
 }
 
 const testFixtures: Fixtures<TestFixtures, unknown, PlaywrightTestArgs, PlaywrightWorkerArgs> = {
   // eslint-disable-next-line no-empty-pattern
   context: async ({}, use) => {
-    // Launch context with the same session from global-setup
-    const { browserContext } = await dappwright.launch('', {
-      version: MetaMaskWallet.recommendedVersion,
-      wallet: 'metamask',
-      // Headless tests only in CI
-      headless: !!process.env.CI,
-    });
+    if (!sharedContext) {
+      // Launch shared context with the same session from global-setup
+      const { browserContext, wallet } = await dappwright.launch('', {
+        version: metamaskVersion,
+        wallet: 'metamask',
+        // Headless tests only in CI
+        headless: !!process.env.CI,
+      });
 
-    await use(browserContext);
-    await browserContext.close();
+      const networkConfig = {
+        networkName: 'polygon',
+        rpc: 'https://polygon-rpc.com',
+        chainId: 137,
+        symbol: 'Matic',
+      };
+
+      await wallet.unlock(process.env.PASSWORD);
+      await wallet.addNetwork(networkConfig);
+      await wallet.switchNetwork('polygon');
+      sharedContext = browserContext;
+    }
+
+    await use(sharedContext);
+    // await sharedContext.close();
   },
   metamask: async ({ context }, use) => {
     const metamask = await dappwright.getWallet('metamask', context);
-
     await use(metamask);
   },
   toast: async ({ page }, use) => {
@@ -67,6 +84,9 @@ const testFixtures: Fixtures<TestFixtures, unknown, PlaywrightTestArgs, Playwrig
     const withdrawPage = new WithdrawPage(page);
     await use(withdrawPage);
   },
+  portfolioPage: async ({ page }, use) => {
+    await use(new PortfolioPage(page));
+  },
   header: async ({ page, metamask }, use) => {
     const header = new HeaderPage(page, metamask);
     await use(header);
@@ -83,38 +103,3 @@ export const expect = test.expect;
 // If one of the tests fails, all subsequent tests are skipped.
 // All tests in the group are retried together.
 test.describe.configure({ mode: 'serial' });
-
-// test.beforeAll(async ({ metamask, page }) => {
-//   // Add Polygon network here if you need it
-
-//   //  TODO: Check if metamask is already unlocked (calling will crash if it already is)
-//   await metamask.unlock('testingbal123');
-
-//   // TODO: You should check if network is already added
-//   await metamask.addNetwork({
-//     networkName: 'polygon',
-//     rpc: 'https://polygon-rpc.com',
-//     chainId: 137,
-//     symbol: 'Matic',
-//   });
-//   await metamask.switchNetwork('polygon');
-
-//   // Add an extra account
-//   await metamask.createAccount();
-// });
-
-const goerli = {
-  networkName: 'goerli',
-  rpc: 'https://goerli.blockpi.network/v1/rpc/public',
-  chainId: 5,
-  symbol: 'ETH',
-};
-
-// const polygon = {
-//   networkName: 'polygon',
-//   rpc: 'https://polygon-rpc.com',
-//   chainId: 137,
-//   symbol: 'Matic',
-// };
-
-export const network = goerli;

@@ -3,6 +3,9 @@ import dappwright, { MetaMaskWallet } from '@tenkeylabs/dappwright';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+// export const metamaskVersion = '10.27.0';
+export const metamaskVersion = MetaMaskWallet.recommendedVersion;
+
 async function globalSetup(config: FullConfig) {
   if (!process.env.SEED_PHRASE) {
     throw new Error(
@@ -14,22 +17,12 @@ async function globalSetup(config: FullConfig) {
     showTestNets: true,
     password: process.env.PASSWORD,
     seed: process.env.SEED_PHRASE,
-    version: MetaMaskWallet.recommendedVersion,
+    version: metamaskVersion,
     // Headless tests only in CI
     headless: !!process.env.CI,
   });
 
-  const goerli = {
-    networkName: 'goerli',
-    rpc: 'https://goerli.blockpi.network/v1/rpc/public',
-    chainId: 5,
-    symbol: 'ETH',
-  };
-
-  await metamask.addNetwork(goerli);
-  // await metamask.switchNetwork('goerli');
-
-  console.log('Global setup finished installing metamask with goerli network');
+  console.log('Global setup finished installing metamask');
   await context.close();
 }
 

@@ -16,6 +16,10 @@ export default class PoolPage {
     return gotoPath(`pool/${poolId}`, this.page);
   }
 
+  public clickPool(id: string): Promise<void> {
+    return this.page.getByTestId(id).click();
+  }
+
   public clickAddLiquidityLink(): Promise<void> {
     return this.page.getByRole('link', { name: /Add Liquidity/i }).click();
   }
