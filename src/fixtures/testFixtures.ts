@@ -18,6 +18,7 @@ import ModalPage from '../pages/Modal.page';
 import PortfolioPage from '../pages/Portfolio.page';
 import { metamaskVersion } from '../global-setup';
 
+let sharedContext: BrowserContext;
 interface TestFixtures {
   context: BrowserContext;
   metamask: Dappwright;
@@ -34,21 +35,33 @@ interface TestFixtures {
 const testFixtures: Fixtures<TestFixtures, unknown, PlaywrightTestArgs, PlaywrightWorkerArgs> = {
   // eslint-disable-next-line no-empty-pattern
   context: async ({}, use) => {
-    // Launch context with the same session from global-setup
-    const { browserContext } = await dappwright.launch('', {
-      version: metamaskVersion,
-      wallet: 'metamask',
-      // Headless tests only in CI
-      headless: !!process.env.CI,
-    });
+    if (!sharedContext) {
+      // Launch shared context with the same session from global-setup
+      const { browserContext, wallet } = await dappwright.launch('', {
+        version: metamaskVersion,
+        wallet: 'metamask',
+        // Headless tests only in CI
+        headless: !!process.env.CI,
+      });
 
-    await use(browserContext);
-    await browserContext.close();
+      const networkConfig = {
+        networkName: 'polygon',
+        rpc: 'https://polygon-rpc.com',
+        chainId: 137,
+        symbol: 'Matic',
+      };
+
+      await wallet.unlock(process.env.PASSWORD);
+      await wallet.addNetwork(networkConfig);
+      await wallet.switchNetwork('polygon');
+      sharedContext = browserContext;
+    }
+
+    await use(sharedContext);
+    // await sharedContext.close();
   },
   metamask: async ({ context }, use) => {
     const metamask = await dappwright.getWallet('metamask', context);
-
-    await metamask.switchNetwork('polygon');
     await use(metamask);
   },
   toast: async ({ page }, use) => {

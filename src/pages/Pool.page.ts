@@ -16,11 +16,8 @@ export default class PoolPage {
     return gotoPath(`pool/${poolId}`, this.page);
   }
 
-  public clickPoolWithStMatic(): Promise<void> {
-    return this.page
-      .getByRole('row', { name: /WMATIC stMATIC/i })
-      .getByRole('button', { name: 'stMATIC' })
-      .click();
+  public clickPool(id: string): Promise<void> {
+    return this.page.getByTestId(id).click();
   }
 
   public clickAddLiquidityLink(): Promise<void> {

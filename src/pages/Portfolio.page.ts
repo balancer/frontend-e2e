@@ -13,15 +13,15 @@ export default class PortfolioPage {
     return gotoPath('portfolio', this.page);
   }
 
-  public findPoolWithStMatic() {
-    return this.page.getByRole('button', { name: 'stMATIC' });
+  public findPoolWithWMatic() {
+    return this.page.getByRole('button', { name: 'wMATIC' });
   }
 
-  public hasBalanceInPoolWithStMatic(): Promise<boolean> {
-    return this.findPoolWithStMatic().isVisible();
+  public hasBalanceInPoolWithWMatic(): Promise<boolean> {
+    return this.findPoolWithWMatic().isVisible();
   }
 
-  public goToPoolWithStMatic() {
-    return this.findPoolWithStMatic().click();
+  public goToPoolWithWMatic() {
+    return this.findPoolWithWMatic().click();
   }
 }

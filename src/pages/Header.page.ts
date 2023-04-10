@@ -33,23 +33,6 @@ export default class HeaderPage {
   };
 
   public async connectWallet() {
-    await this.metamask.page.bringToFront();
-
-    const hasPolygon = await this.metamask.hasNetwork('polygon');
-
-    if (!hasPolygon) {
-      await this.metamask.unlock(process.env.PASSWORD);
-      const networkConfig = {
-        networkName: 'polygon',
-        rpc: 'https://polygon-rpc.com',
-        chainId: 137,
-        symbol: 'Matic',
-      };
-
-      await this.metamask.addNetwork(networkConfig);
-      await this.metamask.switchNetwork('polygon');
-    }
-
     this.page.bringToFront();
 
     // Wait for a moment for the page to load, to see if the wallet is connected automatically

@@ -5,16 +5,18 @@ import PoolPage from '../pages/Pool.page';
 import ToastPage from '../pages/Toast.page';
 import WithdrawPage from '../pages/Withdraw.page';
 
-async function goToStMaticPoolFromMainPage(header: HeaderPage, poolPage: PoolPage) {
+// Weighted pool WMATIC25% USDC25% WETH25% BAL25%
+const wMaticPoolId = '0x0297e37f1873d2dab4487aa67cd56b58e2f27875000100000000000000000002';
+
+async function goToWMaticPoolFromMainPage(header: HeaderPage, poolPage: PoolPage) {
   await header.goToMainPage();
   await header.connectWallet();
 
-  // Composable Stable Pool WMATIC-stMATIC
-  await poolPage.clickPoolWithStMatic();
+  await poolPage.clickPool(wMaticPoolId);
 }
 
-async function goToStMaticPool(header: HeaderPage, poolPage: PoolPage) {
-  await poolPage.goto('0x8159462d255c1d24915cb51ec361f700174cd99400000000000000000000075d');
+async function goToWMaticPool(header: HeaderPage, poolPage: PoolPage) {
+  await poolPage.goto(wMaticPoolId);
   await header.connectWallet();
 }
 
@@ -24,7 +26,7 @@ test.describe('Pool page', () => {
    * If there is balance, it will exit the pool to enforce that the next tests are always executed in similar conditions
    * (and to avoid testing account balance problems)
    **/
-  test.only('Enforce clean initial state', async ({
+  test('Enforce clean initial state', async ({
     header,
     portfolioPage,
     poolPage,
@@ -34,16 +36,16 @@ test.describe('Pool page', () => {
   }) => {
     await portfolioPage.goto();
     await header.connectWallet();
-    if (await portfolioPage.hasBalanceInPoolWithStMatic()) {
+    if (await portfolioPage.hasBalanceInPoolWithWMatic()) {
       // Temporarily throw an error to understand error frequency
       // throw new Error('Test account has balance in wMATIC stMATIC pool. Exit is needed.');
-      await portfolioPage.goToPoolWithStMatic();
+      await portfolioPage.goToPoolWithWMatic();
       await exitPool(poolPage, withdrawPage, metamask, toast);
     }
   });
 
-  test('Join pool', async ({ metamask, toast, header, poolPage, addLiquidityPage }) => {
-    await goToStMaticPoolFromMainPage(header, poolPage);
+  test('Join pool', async ({ toast, header, poolPage, addLiquidityPage, metamask }) => {
+    await goToWMaticPoolFromMainPage(header, poolPage);
 
     await poolPage.clickAddLiquidityLink();
 
@@ -69,7 +71,7 @@ test.describe('Pool page', () => {
   });
 
   test('Exit pool', async ({ header, poolPage, withdrawPage, metamask, toast }) => {
-    await goToStMaticPool(header, poolPage);
+    await goToWMaticPool(header, poolPage);
     await exitPool(poolPage, withdrawPage, metamask, toast);
   });
 });
@@ -81,13 +83,12 @@ async function exitPool(
   metamask: Dappwright,
   toast: ToastPage
 ) {
-  // Go to Withdraw page
   await poolPage.clickWithdrawLink();
 
-  // Click the preview button
+  await withdrawPage.selectMaxWMatic();
+
   await withdrawPage.clickPreviewButton();
 
-  // Click the confirm button
   await withdrawPage.clickConfirmButton();
 
   await metamask.confirmTransaction();
