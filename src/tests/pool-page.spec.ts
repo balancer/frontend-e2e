@@ -5,8 +5,8 @@ import PoolPage from '../pages/Pool.page';
 import ToastPage from '../pages/Toast.page';
 import WithdrawPage from '../pages/Withdraw.page';
 
-// Weighted pool WMATIC25% USDC25% WETH25% BAL25%
-const wMaticPoolId = '0x0297e37f1873d2dab4487aa67cd56b58e2f27875000100000000000000000002';
+// StMATIC/Boosted Aave V3 WMATIC
+const wMaticPoolId = '0x216690738aac4aa0c4770253ca26a28f0115c595000000000000000000000b2c';
 
 async function goToWMaticPoolFromMainPage(header: HeaderPage, poolPage: PoolPage) {
   await header.goToMainPage();

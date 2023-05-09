@@ -45,6 +45,8 @@ export default class HeaderPage {
     if (accountButtonHidden && loadingWalletButtonHidden) {
       await this.page.getByRole('button', { name: 'Connect wallet' }).first().click();
 
+      // Check "Accept Terms of Use"
+      await this.page.getByRole('radio').click();
       await this.page.getByRole('button', { name: 'Metamask' }).click({ force: true });
       // Approve the connection when MetaMask pops up
       await this.metamask.approve();

@@ -9,9 +9,10 @@ export default class SwapPage {
   }
 
   public async selectMaxWMatic() {
-    await this.page.getByText(/all tokens/i).click();
-    await this.page.getByText('WMATIC', { exact: true }).click();
-    await this.page.getByRole('button', { name: /max/i }).click();
+    // Withdraw all to WMatic
+    await this.page.getByText(/single token/i).click();
+    const maxButtonName = /^Max.*Max?/i;
+    await this.page.getByRole('button', { name: maxButtonName }).click();
   }
 
   public clickPreviewButton(): Promise<void> {
